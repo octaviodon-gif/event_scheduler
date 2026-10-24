@@ -1,0 +1,112 @@
+"use client";
+
+import { startTransition, useActionState, useRef, useState } from "react";
+import { createPurchase, type PurchaseFormState } from "./actions";
+import { PURCHASE_STATUS_LABELS, PURCHASE_STATUS_VALUES } from "@/lib/purchase-status";
+
+const input =
+  "w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 dark:border-neutral-700";
+
+export default function PurchaseForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [total, setTotal] = useState("0.00");
+
+  async function submit(prev: PurchaseFormState, fd: FormData) {
+    const result = await createPurchase(prev, fd);
+    if (result.ok) {
+      formRef.current?.reset();
+      setTotal("0.00");
+    }
+    return result;
+  }
+
+  const [state, formAction, pending] = useActionState(submit, {});
+
+  // Live preview only; the server recalculates the real total
+  function updateTotal() {
+    if (!formRef.current) return;
+    const fd = new FormData(formRef.current);
+    const qty = Number(fd.get("quantity")) || 0;
+    const price = Number(fd.get("price")) || 0;
+    setTotal((Math.round(qty * price * 100) / 100).toFixed(2));
+  }
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault(); // manual submit so a validation error doesn't wipe the fields
+    const fd = new FormData(e.currentTarget);
+    startTransition(() => formAction(fd));
+  }
+
+  const err = (name: string) =>
+    state.fieldErrors?.[name] ? (
+      <p className="mt-1 text-xs text-red-600">{state.fieldErrors[name]}</p>
+    ) : null;
+
+  return (
+    <form ref={formRef} onSubmit={onSubmit} onChange={updateTotal} className="grid gap-4 sm:grid-cols-2">
+      <label className="sm:col-span-2">
+        <span className="text-sm">Item name</span>
+        <input name="assetName" className={input} required maxLength={100} />
+        {err("assetName")}
+      </label>
+
+      <label>
+        <span className="text-sm">Quantity</span>
+        <input name="quantity" type="number" min={1} step={1} defaultValue={1} className={input} required />
+        {err("quantity")}
+      </label>
+
+      <label>
+        <span className="text-sm">Unit price</span>
+        <input name="price" inputMode="decimal" placeholder="0.00" className={input} required />
+        {err("price")}
+      </label>
+
+      <label>
+        <span className="text-sm">Provider</span>
+        <input name="provider" className={input} required maxLength={150} />
+        {err("provider")}
+      </label>
+
+      <label>
+        <span className="text-sm">Status</span>
+        <select name="purchaseStatus" defaultValue="PENDING_PURCHASE" className={input}>
+          {PURCHASE_STATUS_VALUES.map((v) => (
+            <option key={v} value={v}>
+              {PURCHASE_STATUS_LABELS[v]}
+            </option>
+          ))}
+        </select>
+        {err("purchaseStatus")}
+      </label>
+
+      <label>
+        <span className="text-sm">Color (optional)</span>
+        <input name="assetColor" className={input} maxLength={50} />
+        {err("assetColor")}
+      </label>
+
+      <label>
+        <span className="text-sm">Measures (optional)</span>
+        <input name="assetMeasures" className={input} maxLength={100} />
+        {err("assetMeasures")}
+      </label>
+
+      <div className="flex items-center justify-between sm:col-span-2">
+        <p className="text-sm">
+          Total: <strong>${total}</strong>
+        </p>
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
+        >
+          {pending ? "Saving…" : "Save purchase"}
+        </button>
+      </div>
+
+      {state.ok && <p className="text-sm text-green-700 sm:col-span-2">Purchase saved.</p>}
+      {state.error && <p className="text-sm text-red-600 sm:col-span-2">{state.error}</p>}
+    </form>
+  );
+}
