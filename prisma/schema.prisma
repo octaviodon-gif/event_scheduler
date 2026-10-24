@@ -1,0 +1,125 @@
+// Prisma 7: no `url` here, the connection string lives in prisma.config.ts
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// 1. Assets: the rentable SETS (quantity + pricing)
+// ─────────────────────────────────────────────
+model Asset {
+  assetId       String  @id @default(uuid()) @map("asset_id") @db.Uuid
+  assetName     String  @unique @map("asset_name") @db.VarChar(100)
+  assetAmount   Int     @default(0) @map("asset_amount") // how many units of this set you own
+  assetColor    String? @map("asset_color") @db.VarChar(50)
+  assetMeasures String? @map("asset_measures") @db.VarChar(100)
+  assetPrice    Decimal @map("asset_price") @db.Decimal(10, 2) // rental price per event
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  items  AssetItem[]  // what the set is made of (Set Setup)
+  events EventAsset[] // bookings that include this set
+
+  @@map("assets")
+}
+
+// ─────────────────────────────────────────────
+// 2. Events: customer bookings + payment tracking
+//    (sets are attached through EventAsset)
+// ─────────────────────────────────────────────
+model Event {
+  eventNo       Int     @id @default(autoincrement()) @map("event_no") // running count of events rented
+  customerName  String  @map("customer_name") @db.VarChar(150)
+  customerPhone String  @map("customer_phone") @db.VarChar(20)
+  customerEmail String? @map("customer_email") @db.VarChar(255)
+  eventAddress  String  @map("event_address") @db.Text
+  notes         String? @db.Text
+
+  date      DateTime @db.Date
+  startTime DateTime @map("start_time") @db.Time(0)
+  endTime   DateTime @map("end_time") @db.Time(0)
+
+  downPaymentAmount Decimal @default(0) @map("down_payment_amount") @db.Decimal(10, 2)
+  paymentComplete   Boolean @default(false) @map("payment_complete")
+  pendingPayment    Decimal @default(0) @map("pending_payment") @db.Decimal(10, 2) // stored; computed in app: rentTotalPrice - downPaymentAmount
+  discount          Decimal @default(0) @db.Decimal(10, 2)
+  rentTotalPrice    Decimal @map("rent_total_price") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  assets EventAsset[]
+
+  @@index([date])
+  @@map("events")
+}
+
+// ─────────────────────────────────────────────
+// 3. Purchases: inventory purchases, price, provider
+// ─────────────────────────────────────────────
+enum PurchaseStatus {
+  PENDING_PURCHASE @map("pending purchase")
+  PAID             @map("paid")
+  IN_DELIVERY      @map("in delivery")
+  RECEIVED         @map("received")
+  COMPLETED        @map("completed")
+
+  @@map("purchase_status")
+}
+
+model Purchase {
+  purchaseId     String         @id @default(uuid()) @map("purchase_id") @db.Uuid
+  assetName      String         @map("asset_name") @db.VarChar(100)
+  quantity       Int            @default(1)
+  provider       String         @db.VarChar(150)
+  assetColor     String?        @map("asset_color") @db.VarChar(50)
+  assetMeasures  String?        @map("asset_measures") @db.VarChar(100)
+  purchaseStatus PurchaseStatus @default(PENDING_PURCHASE) @map("purchase_status")
+  price          Decimal        @db.Decimal(10, 2) // unit price
+  totalAmount    Decimal        @map("total_amount") @db.Decimal(10, 2) // stored; computed in app: price * quantity
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  setItems AssetItem[]
+
+  @@map("purchases")
+}
+
+// ─────────────────────────────────────────────
+// Join: Set Setup. Which purchased items make up a set
+// (needed for the "📦 Mobiliario" list in the calendar invite)
+// ─────────────────────────────────────────────
+model AssetItem {
+  assetId    String @map("asset_id") @db.Uuid
+  purchaseId String @map("purchase_id") @db.Uuid
+  quantity   Int    @default(1) // units of that purchased item inside ONE set
+
+  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  purchase Purchase @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
+
+  @@id([assetId, purchaseId])
+  @@map("asset_items")
+}
+
+// ─────────────────────────────────────────────
+// Join: sets rented in an event (several per event)
+// ─────────────────────────────────────────────
+model EventAsset {
+  eventNo  Int    @map("event_no")
+  assetId  String @map("asset_id") @db.Uuid
+  quantity Int    @default(1) // units of this set taken by the event; used for availability
+
+  event Event @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
+  asset Asset @relation(fields: [assetId], references: [assetId], onDelete: Restrict)
+
+  @@id([eventNo, assetId])
+  @@index([assetId])
+  @@map("event_assets")
+}
