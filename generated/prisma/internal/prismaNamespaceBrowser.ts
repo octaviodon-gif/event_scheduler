@@ -51,11 +51,14 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Category: 'Category',
   Asset: 'Asset',
+  AssetSlot: 'AssetSlot',
+  AssetFixedItem: 'AssetFixedItem',
   Event: 'Event',
-  Purchase: 'Purchase',
-  AssetItem: 'AssetItem',
-  EventAsset: 'EventAsset'
+  EventAsset: 'EventAsset',
+  EventItem: 'EventItem',
+  Purchase: 'Purchase'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -74,6 +77,15 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const CategoryScalarFieldEnum = {
+  categoryId: 'categoryId',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
 export const AssetScalarFieldEnum = {
   assetId: 'assetId',
   assetName: 'assetName',
@@ -86,6 +98,24 @@ export const AssetScalarFieldEnum = {
 } as const
 
 export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
+export const AssetSlotScalarFieldEnum = {
+  assetId: 'assetId',
+  categoryId: 'categoryId',
+  quantity: 'quantity'
+} as const
+
+export type AssetSlotScalarFieldEnum = (typeof AssetSlotScalarFieldEnum)[keyof typeof AssetSlotScalarFieldEnum]
+
+
+export const AssetFixedItemScalarFieldEnum = {
+  assetId: 'assetId',
+  purchaseId: 'purchaseId',
+  quantity: 'quantity'
+} as const
+
+export type AssetFixedItemScalarFieldEnum = (typeof AssetFixedItemScalarFieldEnum)[keyof typeof AssetFixedItemScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {
@@ -104,10 +134,32 @@ export const EventScalarFieldEnum = {
   discount: 'discount',
   rentTotalPrice: 'rentTotalPrice',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  googleEventId: 'googleEventId'
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const EventAssetScalarFieldEnum = {
+  eventNo: 'eventNo',
+  assetId: 'assetId',
+  quantity: 'quantity',
+  price: 'price'
+} as const
+
+export type EventAssetScalarFieldEnum = (typeof EventAssetScalarFieldEnum)[keyof typeof EventAssetScalarFieldEnum]
+
+
+export const EventItemScalarFieldEnum = {
+  eventNo: 'eventNo',
+  purchaseId: 'purchaseId',
+  kind: 'kind',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice'
+} as const
+
+export type EventItemScalarFieldEnum = (typeof EventItemScalarFieldEnum)[keyof typeof EventItemScalarFieldEnum]
 
 
 export const PurchaseScalarFieldEnum = {
@@ -119,30 +171,17 @@ export const PurchaseScalarFieldEnum = {
   assetMeasures: 'assetMeasures',
   purchaseStatus: 'purchaseStatus',
   price: 'price',
+  rentalPrice: 'rentalPrice',
   totalAmount: 'totalAmount',
+  categoryId: 'categoryId',
+  unavailableQuantity: 'unavailableQuantity',
+  unavailableReason: 'unavailableReason',
+  unavailableNote: 'unavailableNote',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum]
-
-
-export const AssetItemScalarFieldEnum = {
-  assetId: 'assetId',
-  purchaseId: 'purchaseId',
-  quantity: 'quantity'
-} as const
-
-export type AssetItemScalarFieldEnum = (typeof AssetItemScalarFieldEnum)[keyof typeof AssetItemScalarFieldEnum]
-
-
-export const EventAssetScalarFieldEnum = {
-  eventNo: 'eventNo',
-  assetId: 'assetId',
-  quantity: 'quantity'
-} as const
-
-export type EventAssetScalarFieldEnum = (typeof EventAssetScalarFieldEnum)[keyof typeof EventAssetScalarFieldEnum]
 
 
 export const SortOrder = {

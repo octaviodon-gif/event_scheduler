@@ -16,3 +16,13 @@ export const PURCHASE_STATUS_LABELS: Record<PurchaseStatusValue, string> = {
   RECEIVED: "Received",
   COMPLETED: "Completed",
 };
+
+// Why units of a purchase are out of service (matches UnavailableReason in schema.prisma)
+export const UNAVAILABLE_REASON_VALUES = ["MAINTENANCE", "DEPRECATED"] as const;
+
+export type UnavailableReasonValue = (typeof UNAVAILABLE_REASON_VALUES)[number];
+
+export const UNAVAILABLE_REASON_LABELS: Record<UnavailableReasonValue, string> = {
+  MAINTENANCE: "In maintenance",
+  DEPRECATED: "Deprecated / retired",
+};

@@ -8,9 +8,12 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Category'
 export type * from './models/Asset'
+export type * from './models/AssetSlot'
+export type * from './models/AssetFixedItem'
 export type * from './models/Event'
-export type * from './models/Purchase'
-export type * from './models/AssetItem'
 export type * from './models/EventAsset'
+export type * from './models/EventItem'
+export type * from './models/Purchase'
 export type * from './commonInputTypes'

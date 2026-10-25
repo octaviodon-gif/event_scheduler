@@ -10,28 +10,70 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────
-// 1. Assets: the rentable SETS (quantity + pricing)
+// Categories: item types defined by the business owner
+// (e.g. "Inflable", "Toldo", "Montaña rusa", "Pelotas")
+// ─────────────────────────────────────────────
+model Category {
+  categoryId String   @id @default(uuid()) @map("category_id") @db.Uuid
+  name       String   @unique @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  purchases Purchase[]
+  slots     AssetSlot[]
+
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// 1. Assets: the rentable SETS (fixed price, made of slots by category)
 // ─────────────────────────────────────────────
 model Asset {
   assetId       String  @id @default(uuid()) @map("asset_id") @db.Uuid
   assetName     String  @unique @map("asset_name") @db.VarChar(100)
-  assetAmount   Int     @default(0) @map("asset_amount") // how many units of this set you own
+  assetAmount   Int?    @map("asset_amount") // max sets rented at the same time; empty = no limit
   assetColor    String? @map("asset_color") @db.VarChar(50)
   assetMeasures String? @map("asset_measures") @db.VarChar(100)
-  assetPrice    Decimal @map("asset_price") @db.Decimal(10, 2) // rental price per event
+  assetPrice    Decimal @map("asset_price") @db.Decimal(10, 2) // fixed rental price per event
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  items  AssetItem[]  // what the set is made of (Set Setup)
-  events EventAsset[] // bookings that include this set
+  slots      AssetSlot[]      // chosen at booking: e.g. 2 x Inflable, 1 x Toldo
+  fixedItems AssetFixedItem[] // always included: specific items, e.g. 1 x Babygym Verde
+  events     EventAsset[]     // bookings that include this set
 
   @@map("assets")
 }
 
+// One row per category in a set: how many items of that category the customer picks
+model AssetSlot {
+  assetId    String @map("asset_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+  quantity   Int    @default(1)
+
+  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
+
+  @@id([assetId, categoryId])
+  @@map("asset_slots")
+}
+
+// A specific item that is ALWAYS part of the set (not chosen at booking)
+model AssetFixedItem {
+  assetId    String @map("asset_id") @db.Uuid
+  purchaseId String @map("purchase_id") @db.Uuid
+  quantity   Int    @default(1)
+
+  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  purchase Purchase @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
+
+  @@id([assetId, purchaseId])
+  @@index([purchaseId])
+  @@map("asset_fixed_items")
+}
+
 // ─────────────────────────────────────────────
 // 2. Events: customer bookings + payment tracking
-//    (sets are attached through EventAsset)
 // ─────────────────────────────────────────────
 model Event {
   eventNo       Int     @id @default(autoincrement()) @map("event_no") // running count of events rented
@@ -54,10 +96,53 @@ model Event {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  googleEventId String? @map("google_event_id") // id of the event created in Google Calendar
+
   assets EventAsset[]
+  items  EventItem[]
 
   @@index([date])
   @@map("events")
+}
+
+// Sets rented in an event (several per event)
+model EventAsset {
+  eventNo  Int    @map("event_no")
+  assetId  String @map("asset_id") @db.Uuid
+  quantity Int    @default(1) // how many of this set the event rents
+  price    Decimal? @map("price") @db.Decimal(10, 2) // set price at booking time, so later price changes do not alter past events
+
+  event Event       @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
+  asset Asset       @relation(fields: [assetId], references: [assetId], onDelete: Restrict)
+
+  @@id([eventNo, assetId])
+  @@index([assetId])
+  @@map("event_assets")
+}
+
+// Why an item is reserved by an event
+enum EventItemKind {
+  SET_FIXED @map("set_fixed") // always part of the set
+  SET_PICK  @map("set_pick")  // chosen for one of the set's pick rows
+  EXTRA     @map("extra")     // extra rental, charged at the item's rental price
+
+  @@map("event_item_kind")
+}
+
+// The specific items reserved by an event (used for availability and pricing)
+model EventItem {
+  eventNo    Int           @map("event_no")
+  purchaseId String        @map("purchase_id") @db.Uuid
+  kind       EventItemKind
+  quantity   Int           @default(1)
+  unitPrice  Decimal?      @map("unit_price") @db.Decimal(10, 2) // rental price per unit at booking time (extras only)
+
+  event    Event    @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
+  purchase Purchase @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
+
+  @@id([eventNo, purchaseId, kind])
+  @@index([purchaseId])
+  @@map("event_items")
 }
 
 // ─────────────────────────────────────────────
@@ -73,6 +158,14 @@ enum PurchaseStatus {
   @@map("purchase_status")
 }
 
+// Why some units of a purchase are out of service
+enum UnavailableReason {
+  MAINTENANCE @map("maintenance")
+  DEPRECATED  @map("deprecated")
+
+  @@map("unavailable_reason")
+}
+
 model Purchase {
   purchaseId     String         @id @default(uuid()) @map("purchase_id") @db.Uuid
   assetName      String         @map("asset_name") @db.VarChar(100)
@@ -82,44 +175,23 @@ model Purchase {
   assetMeasures  String?        @map("asset_measures") @db.VarChar(100)
   purchaseStatus PurchaseStatus @default(PENDING_PURCHASE) @map("purchase_status")
   price          Decimal        @db.Decimal(10, 2) // unit price
+  rentalPrice    Decimal?       @map("rental_price") @db.Decimal(10, 2) // what a customer pays to rent one unit when it is NOT part of a set
   totalAmount    Decimal        @map("total_amount") @db.Decimal(10, 2) // stored; computed in app: price * quantity
+
+  categoryId String?   @map("category_id") @db.Uuid
+  category   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
+
+  // Units out of service (maintenance or retired). Usable units = quantity - unavailableQuantity
+  unavailableQuantity Int                @default(0) @map("unavailable_quantity")
+  unavailableReason   UnavailableReason? @map("unavailable_reason")
+  unavailableNote     String?            @map("unavailable_note") @db.VarChar(255)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  setItems AssetItem[]
+  eventItems  EventItem[]
+  fixedInSets AssetFixedItem[]
 
+  @@index([categoryId])
   @@map("purchases")
-}
-
-// ─────────────────────────────────────────────
-// Join: Set Setup. Which purchased items make up a set
-// (needed for the "📦 Mobiliario" list in the calendar invite)
-// ─────────────────────────────────────────────
-model AssetItem {
-  assetId    String @map("asset_id") @db.Uuid
-  purchaseId String @map("purchase_id") @db.Uuid
-  quantity   Int    @default(1) // units of that purchased item inside ONE set
-
-  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
-  purchase Purchase @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
-
-  @@id([assetId, purchaseId])
-  @@map("asset_items")
-}
-
-// ─────────────────────────────────────────────
-// Join: sets rented in an event (several per event)
-// ─────────────────────────────────────────────
-model EventAsset {
-  eventNo  Int    @map("event_no")
-  assetId  String @map("asset_id") @db.Uuid
-  quantity Int    @default(1) // units of this set taken by the event; used for availability
-
-  event Event @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
-  asset Asset @relation(fields: [assetId], references: [assetId], onDelete: Restrict)
-
-  @@id([eventNo, assetId])
-  @@index([assetId])
-  @@map("event_assets")
 }

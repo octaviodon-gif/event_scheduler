@@ -29,29 +29,34 @@ export type AggregateEventAsset = {
 export type EventAssetAvgAggregateOutputType = {
   eventNo: number | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type EventAssetSumAggregateOutputType = {
   eventNo: number | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type EventAssetMinAggregateOutputType = {
   eventNo: number | null
   assetId: string | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type EventAssetMaxAggregateOutputType = {
   eventNo: number | null
   assetId: string | null
   quantity: number | null
+  price: runtime.Decimal | null
 }
 
 export type EventAssetCountAggregateOutputType = {
   eventNo: number
   assetId: number
   quantity: number
+  price: number
   _all: number
 }
 
@@ -59,29 +64,34 @@ export type EventAssetCountAggregateOutputType = {
 export type EventAssetAvgAggregateInputType = {
   eventNo?: true
   quantity?: true
+  price?: true
 }
 
 export type EventAssetSumAggregateInputType = {
   eventNo?: true
   quantity?: true
+  price?: true
 }
 
 export type EventAssetMinAggregateInputType = {
   eventNo?: true
   assetId?: true
   quantity?: true
+  price?: true
 }
 
 export type EventAssetMaxAggregateInputType = {
   eventNo?: true
   assetId?: true
   quantity?: true
+  price?: true
 }
 
 export type EventAssetCountAggregateInputType = {
   eventNo?: true
   assetId?: true
   quantity?: true
+  price?: true
   _all?: true
 }
 
@@ -175,6 +185,7 @@ export type EventAssetGroupByOutputType = {
   eventNo: number
   assetId: string
   quantity: number
+  price: runtime.Decimal | null
   _count: EventAssetCountAggregateOutputType | null
   _avg: EventAssetAvgAggregateOutputType | null
   _sum: EventAssetSumAggregateOutputType | null
@@ -204,6 +215,7 @@ export type EventAssetWhereInput = {
   eventNo?: Prisma.IntFilter<"EventAsset"> | number
   assetId?: Prisma.UuidFilter<"EventAsset"> | string
   quantity?: Prisma.IntFilter<"EventAsset"> | number
+  price?: Prisma.DecimalNullableFilter<"EventAsset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
 }
@@ -212,6 +224,7 @@ export type EventAssetOrderByWithRelationInput = {
   eventNo?: Prisma.SortOrder
   assetId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrderInput | Prisma.SortOrder
   event?: Prisma.EventOrderByWithRelationInput
   asset?: Prisma.AssetOrderByWithRelationInput
 }
@@ -224,6 +237,7 @@ export type EventAssetWhereUniqueInput = Prisma.AtLeast<{
   eventNo?: Prisma.IntFilter<"EventAsset"> | number
   assetId?: Prisma.UuidFilter<"EventAsset"> | string
   quantity?: Prisma.IntFilter<"EventAsset"> | number
+  price?: Prisma.DecimalNullableFilter<"EventAsset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
 }, "eventNo_assetId">
@@ -232,6 +246,7 @@ export type EventAssetOrderByWithAggregationInput = {
   eventNo?: Prisma.SortOrder
   assetId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EventAssetCountOrderByAggregateInput
   _avg?: Prisma.EventAssetAvgOrderByAggregateInput
   _max?: Prisma.EventAssetMaxOrderByAggregateInput
@@ -246,10 +261,12 @@ export type EventAssetScalarWhereWithAggregatesInput = {
   eventNo?: Prisma.IntWithAggregatesFilter<"EventAsset"> | number
   assetId?: Prisma.UuidWithAggregatesFilter<"EventAsset"> | string
   quantity?: Prisma.IntWithAggregatesFilter<"EventAsset"> | number
+  price?: Prisma.DecimalNullableWithAggregatesFilter<"EventAsset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateInput = {
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event: Prisma.EventCreateNestedOneWithoutAssetsInput
   asset: Prisma.AssetCreateNestedOneWithoutEventsInput
 }
@@ -258,10 +275,12 @@ export type EventAssetUncheckedCreateInput = {
   eventNo: number
   assetId: string
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event?: Prisma.EventUpdateOneRequiredWithoutAssetsNestedInput
   asset?: Prisma.AssetUpdateOneRequiredWithoutEventsNestedInput
 }
@@ -270,22 +289,26 @@ export type EventAssetUncheckedUpdateInput = {
   eventNo?: Prisma.IntFieldUpdateOperationsInput | number
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateManyInput = {
   eventNo: number
   assetId: string
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUpdateManyMutationInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUncheckedUpdateManyInput = {
   eventNo?: Prisma.IntFieldUpdateOperationsInput | number
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetListRelationFilter = {
@@ -307,28 +330,33 @@ export type EventAssetCountOrderByAggregateInput = {
   eventNo?: Prisma.SortOrder
   assetId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type EventAssetAvgOrderByAggregateInput = {
   eventNo?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type EventAssetMaxOrderByAggregateInput = {
   eventNo?: Prisma.SortOrder
   assetId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type EventAssetMinOrderByAggregateInput = {
   eventNo?: Prisma.SortOrder
   assetId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type EventAssetSumOrderByAggregateInput = {
   eventNo?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type EventAssetCreateNestedManyWithoutAssetInput = {
@@ -415,14 +443,24 @@ export type EventAssetUncheckedUpdateManyWithoutEventNestedInput = {
   deleteMany?: Prisma.EventAssetScalarWhereInput | Prisma.EventAssetScalarWhereInput[]
 }
 
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type EventAssetCreateWithoutAssetInput = {
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event: Prisma.EventCreateNestedOneWithoutAssetsInput
 }
 
 export type EventAssetUncheckedCreateWithoutAssetInput = {
   eventNo: number
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateOrConnectWithoutAssetInput = {
@@ -458,16 +496,19 @@ export type EventAssetScalarWhereInput = {
   eventNo?: Prisma.IntFilter<"EventAsset"> | number
   assetId?: Prisma.UuidFilter<"EventAsset"> | string
   quantity?: Prisma.IntFilter<"EventAsset"> | number
+  price?: Prisma.DecimalNullableFilter<"EventAsset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateWithoutEventInput = {
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   asset: Prisma.AssetCreateNestedOneWithoutEventsInput
 }
 
 export type EventAssetUncheckedCreateWithoutEventInput = {
   assetId: string
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateOrConnectWithoutEventInput = {
@@ -499,41 +540,49 @@ export type EventAssetUpdateManyWithWhereWithoutEventInput = {
 export type EventAssetCreateManyAssetInput = {
   eventNo: number
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUpdateWithoutAssetInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   event?: Prisma.EventUpdateOneRequiredWithoutAssetsNestedInput
 }
 
 export type EventAssetUncheckedUpdateWithoutAssetInput = {
   eventNo?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUncheckedUpdateManyWithoutAssetInput = {
   eventNo?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetCreateManyEventInput = {
   assetId: string
   quantity?: number
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUpdateWithoutEventInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   asset?: Prisma.AssetUpdateOneRequiredWithoutEventsNestedInput
 }
 
 export type EventAssetUncheckedUpdateWithoutEventInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type EventAssetUncheckedUpdateManyWithoutEventInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -542,6 +591,7 @@ export type EventAssetSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   eventNo?: boolean
   assetId?: boolean
   quantity?: boolean
+  price?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["eventAsset"]>
@@ -550,6 +600,7 @@ export type EventAssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   eventNo?: boolean
   assetId?: boolean
   quantity?: boolean
+  price?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["eventAsset"]>
@@ -558,6 +609,7 @@ export type EventAssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   eventNo?: boolean
   assetId?: boolean
   quantity?: boolean
+  price?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["eventAsset"]>
@@ -566,9 +618,10 @@ export type EventAssetSelectScalar = {
   eventNo?: boolean
   assetId?: boolean
   quantity?: boolean
+  price?: boolean
 }
 
-export type EventAssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventNo" | "assetId" | "quantity", ExtArgs["result"]["eventAsset"]>
+export type EventAssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventNo" | "assetId" | "quantity" | "price", ExtArgs["result"]["eventAsset"]>
 export type EventAssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
@@ -592,6 +645,7 @@ export type $EventAssetPayload<ExtArgs extends runtime.Types.Extensions.Internal
     eventNo: number
     assetId: string
     quantity: number
+    price: runtime.Decimal | null
   }, ExtArgs["result"]["eventAsset"]>
   composites: {}
 }
@@ -1020,6 +1074,7 @@ export interface EventAssetFieldRefs {
   readonly eventNo: Prisma.FieldRef<"EventAsset", 'Int'>
   readonly assetId: Prisma.FieldRef<"EventAsset", 'String'>
   readonly quantity: Prisma.FieldRef<"EventAsset", 'Int'>
+  readonly price: Prisma.FieldRef<"EventAsset", 'Decimal'>
 }
     
 

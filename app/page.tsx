@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
+export const instant = false;
+
 const options = [
+  {
+    title: "Item categories",
+    description: "Define the types of items you rent, like inflables or toldos.",
+    href: "/categories",
+  },
   {
     title: "Register Purchases",
     description: "Record items you bought: quantity, provider, price and status.",
@@ -10,12 +17,12 @@ const options = [
   {
     title: "Set Setup",
     description: "Bundle purchased items into rentable sets and set their prices.",
-    href: null, // coming in the next phase
+    href: "/sets",
   },
   {
     title: "Register Customer & Event",
     description: "Book an event and send the Google Calendar invite.",
-    href: null, // coming in a later phase
+    href: "/events",
   },
 ];
 
@@ -40,7 +47,7 @@ export default async function Dashboard() {
         </form>
       </header>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {options.map((o) =>
           o.href ? (
             <Link

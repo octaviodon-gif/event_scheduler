@@ -1,0 +1,183 @@
+// Prisma 7: no `url` here, the connection string lives in prisma.config.ts
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// Categories: item types defined by the business owner
+// (e.g. "Inflable", "Toldo", "Montaña rusa", "Pelotas")
+// ─────────────────────────────────────────────
+model Category {
+  categoryId String   @id @default(uuid()) @map("category_id") @db.Uuid
+  name       String   @unique @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  purchases Purchase[]
+  slots     AssetSlot[]
+
+  @@map("categories")
+}
+
+// ─────────────────────────────────────────────
+// 1. Assets: the rentable SETS (fixed price, made of slots by category)
+// ─────────────────────────────────────────────
+model Asset {
+  assetId       String  @id @default(uuid()) @map("asset_id") @db.Uuid
+  assetName     String  @unique @map("asset_name") @db.VarChar(100)
+  assetAmount   Int?    @map("asset_amount") // max sets rented at the same time; empty = no limit
+  assetColor    String? @map("asset_color") @db.VarChar(50)
+  assetMeasures String? @map("asset_measures") @db.VarChar(100)
+  assetPrice    Decimal @map("asset_price") @db.Decimal(10, 2) // fixed rental price per event
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  slots      AssetSlot[]      // chosen at booking: e.g. 2 x Inflable, 1 x Toldo
+  fixedItems AssetFixedItem[] // always included: specific items, e.g. 1 x Babygym Verde
+  events     EventAsset[]     // bookings that include this set
+
+  @@map("assets")
+}
+
+// One row per category in a set: how many items of that category the customer picks
+model AssetSlot {
+  assetId    String @map("asset_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+  quantity   Int    @default(1)
+
+  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
+
+  @@id([assetId, categoryId])
+  @@map("asset_slots")
+}
+
+// A specific item that is ALWAYS part of the set (not chosen at booking)
+model AssetFixedItem {
+  assetId    String @map("asset_id") @db.Uuid
+  purchaseId String @map("purchase_id") @db.Uuid
+  quantity   Int    @default(1)
+
+  asset    Asset    @relation(fields: [assetId], references: [assetId], onDelete: Cascade)
+  purchase Purchase @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
+
+  @@id([assetId, purchaseId])
+  @@index([purchaseId])
+  @@map("asset_fixed_items")
+}
+
+// ─────────────────────────────────────────────
+// 2. Events: customer bookings + payment tracking
+// ─────────────────────────────────────────────
+model Event {
+  eventNo       Int     @id @default(autoincrement()) @map("event_no") // running count of events rented
+  customerName  String  @map("customer_name") @db.VarChar(150)
+  customerPhone String  @map("customer_phone") @db.VarChar(20)
+  customerEmail String? @map("customer_email") @db.VarChar(255)
+  eventAddress  String  @map("event_address") @db.Text
+  notes         String? @db.Text
+
+  date      DateTime @db.Date
+  startTime DateTime @map("start_time") @db.Time(0)
+  endTime   DateTime @map("end_time") @db.Time(0)
+
+  downPaymentAmount Decimal @default(0) @map("down_payment_amount") @db.Decimal(10, 2)
+  paymentComplete   Boolean @default(false) @map("payment_complete")
+  pendingPayment    Decimal @default(0) @map("pending_payment") @db.Decimal(10, 2) // stored; computed in app: rentTotalPrice - downPaymentAmount
+  discount          Decimal @default(0) @db.Decimal(10, 2)
+  rentTotalPrice    Decimal @map("rent_total_price") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  assets EventAsset[]
+
+  @@index([date])
+  @@map("events")
+}
+
+// Sets rented in an event (several per event)
+model EventAsset {
+  eventNo  Int    @map("event_no")
+  assetId  String @map("asset_id") @db.Uuid
+  quantity Int    @default(1) // how many of this set the event rents
+
+  event Event       @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
+  asset Asset       @relation(fields: [assetId], references: [assetId], onDelete: Restrict)
+  items EventItem[] // the specific items picked for this set
+
+  @@id([eventNo, assetId])
+  @@index([assetId])
+  @@map("event_assets")
+}
+
+// The specific items picked for a set in an event (used for availability)
+model EventItem {
+  eventNo    Int    @map("event_no")
+  assetId    String @map("asset_id") @db.Uuid
+  purchaseId String @map("purchase_id") @db.Uuid
+  quantity   Int    @default(1)
+
+  eventAsset EventAsset @relation(fields: [eventNo, assetId], references: [eventNo, assetId], onDelete: Cascade)
+  purchase   Purchase   @relation(fields: [purchaseId], references: [purchaseId], onDelete: Restrict)
+
+  @@id([eventNo, assetId, purchaseId])
+  @@index([purchaseId])
+  @@map("event_items")
+}
+
+// ─────────────────────────────────────────────
+// 3. Purchases: inventory purchases, price, provider
+// ─────────────────────────────────────────────
+enum PurchaseStatus {
+  PENDING_PURCHASE @map("pending purchase")
+  PAID             @map("paid")
+  IN_DELIVERY      @map("in delivery")
+  RECEIVED         @map("received")
+  COMPLETED        @map("completed")
+
+  @@map("purchase_status")
+}
+
+// Why some units of a purchase are out of service
+enum UnavailableReason {
+  MAINTENANCE @map("maintenance")
+  DEPRECATED  @map("deprecated")
+
+  @@map("unavailable_reason")
+}
+
+model Purchase {
+  purchaseId     String         @id @default(uuid()) @map("purchase_id") @db.Uuid
+  assetName      String         @map("asset_name") @db.VarChar(100)
+  quantity       Int            @default(1)
+  provider       String         @db.VarChar(150)
+  assetColor     String?        @map("asset_color") @db.VarChar(50)
+  assetMeasures  String?        @map("asset_measures") @db.VarChar(100)
+  purchaseStatus PurchaseStatus @default(PENDING_PURCHASE) @map("purchase_status")
+  price          Decimal        @db.Decimal(10, 2) // unit price
+  totalAmount    Decimal        @map("total_amount") @db.Decimal(10, 2) // stored; computed in app: price * quantity
+
+  categoryId String?   @map("category_id") @db.Uuid
+  category   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Restrict)
+
+  // Units out of service (maintenance or retired). Usable units = quantity - unavailableQuantity
+  unavailableQuantity Int                @default(0) @map("unavailable_quantity")
+  unavailableReason   UnavailableReason? @map("unavailable_reason")
+  unavailableNote     String?            @map("unavailable_note") @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  eventItems  EventItem[]
+  fixedInSets AssetFixedItem[]
+
+  @@index([categoryId])
+  @@map("purchases")
+}

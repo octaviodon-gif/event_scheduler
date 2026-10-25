@@ -29,13 +29,17 @@ export type AggregatePurchase = {
 export type PurchaseAvgAggregateOutputType = {
   quantity: number | null
   price: runtime.Decimal | null
+  rentalPrice: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
+  unavailableQuantity: number | null
 }
 
 export type PurchaseSumAggregateOutputType = {
   quantity: number | null
   price: runtime.Decimal | null
+  rentalPrice: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
+  unavailableQuantity: number | null
 }
 
 export type PurchaseMinAggregateOutputType = {
@@ -47,7 +51,12 @@ export type PurchaseMinAggregateOutputType = {
   assetMeasures: string | null
   purchaseStatus: $Enums.PurchaseStatus | null
   price: runtime.Decimal | null
+  rentalPrice: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
+  categoryId: string | null
+  unavailableQuantity: number | null
+  unavailableReason: $Enums.UnavailableReason | null
+  unavailableNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,7 +70,12 @@ export type PurchaseMaxAggregateOutputType = {
   assetMeasures: string | null
   purchaseStatus: $Enums.PurchaseStatus | null
   price: runtime.Decimal | null
+  rentalPrice: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
+  categoryId: string | null
+  unavailableQuantity: number | null
+  unavailableReason: $Enums.UnavailableReason | null
+  unavailableNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -75,7 +89,12 @@ export type PurchaseCountAggregateOutputType = {
   assetMeasures: number
   purchaseStatus: number
   price: number
+  rentalPrice: number
   totalAmount: number
+  categoryId: number
+  unavailableQuantity: number
+  unavailableReason: number
+  unavailableNote: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -85,13 +104,17 @@ export type PurchaseCountAggregateOutputType = {
 export type PurchaseAvgAggregateInputType = {
   quantity?: true
   price?: true
+  rentalPrice?: true
   totalAmount?: true
+  unavailableQuantity?: true
 }
 
 export type PurchaseSumAggregateInputType = {
   quantity?: true
   price?: true
+  rentalPrice?: true
   totalAmount?: true
+  unavailableQuantity?: true
 }
 
 export type PurchaseMinAggregateInputType = {
@@ -103,7 +126,12 @@ export type PurchaseMinAggregateInputType = {
   assetMeasures?: true
   purchaseStatus?: true
   price?: true
+  rentalPrice?: true
   totalAmount?: true
+  categoryId?: true
+  unavailableQuantity?: true
+  unavailableReason?: true
+  unavailableNote?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -117,7 +145,12 @@ export type PurchaseMaxAggregateInputType = {
   assetMeasures?: true
   purchaseStatus?: true
   price?: true
+  rentalPrice?: true
   totalAmount?: true
+  categoryId?: true
+  unavailableQuantity?: true
+  unavailableReason?: true
+  unavailableNote?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -131,7 +164,12 @@ export type PurchaseCountAggregateInputType = {
   assetMeasures?: true
   purchaseStatus?: true
   price?: true
+  rentalPrice?: true
   totalAmount?: true
+  categoryId?: true
+  unavailableQuantity?: true
+  unavailableReason?: true
+  unavailableNote?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -232,7 +270,12 @@ export type PurchaseGroupByOutputType = {
   assetMeasures: string | null
   purchaseStatus: $Enums.PurchaseStatus
   price: runtime.Decimal
+  rentalPrice: runtime.Decimal | null
   totalAmount: runtime.Decimal
+  categoryId: string | null
+  unavailableQuantity: number
+  unavailableReason: $Enums.UnavailableReason | null
+  unavailableNote: string | null
   createdAt: Date
   updatedAt: Date
   _count: PurchaseCountAggregateOutputType | null
@@ -269,10 +312,17 @@ export type PurchaseWhereInput = {
   assetMeasures?: Prisma.StringNullableFilter<"Purchase"> | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFilter<"Purchase"> | $Enums.PurchaseStatus
   price?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.DecimalNullableFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.UuidNullableFilter<"Purchase"> | string | null
+  unavailableQuantity?: Prisma.IntFilter<"Purchase"> | number
+  unavailableReason?: Prisma.EnumUnavailableReasonNullableFilter<"Purchase"> | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.StringNullableFilter<"Purchase"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
-  setItems?: Prisma.AssetItemListRelationFilter
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  eventItems?: Prisma.EventItemListRelationFilter
+  fixedInSets?: Prisma.AssetFixedItemListRelationFilter
 }
 
 export type PurchaseOrderByWithRelationInput = {
@@ -284,10 +334,17 @@ export type PurchaseOrderByWithRelationInput = {
   assetMeasures?: Prisma.SortOrderInput | Prisma.SortOrder
   purchaseStatus?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
+  unavailableReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  unavailableNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  setItems?: Prisma.AssetItemOrderByRelationAggregateInput
+  category?: Prisma.CategoryOrderByWithRelationInput
+  eventItems?: Prisma.EventItemOrderByRelationAggregateInput
+  fixedInSets?: Prisma.AssetFixedItemOrderByRelationAggregateInput
 }
 
 export type PurchaseWhereUniqueInput = Prisma.AtLeast<{
@@ -302,10 +359,17 @@ export type PurchaseWhereUniqueInput = Prisma.AtLeast<{
   assetMeasures?: Prisma.StringNullableFilter<"Purchase"> | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFilter<"Purchase"> | $Enums.PurchaseStatus
   price?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.DecimalNullableFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.UuidNullableFilter<"Purchase"> | string | null
+  unavailableQuantity?: Prisma.IntFilter<"Purchase"> | number
+  unavailableReason?: Prisma.EnumUnavailableReasonNullableFilter<"Purchase"> | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.StringNullableFilter<"Purchase"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
-  setItems?: Prisma.AssetItemListRelationFilter
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  eventItems?: Prisma.EventItemListRelationFilter
+  fixedInSets?: Prisma.AssetFixedItemListRelationFilter
 }, "purchaseId">
 
 export type PurchaseOrderByWithAggregationInput = {
@@ -317,7 +381,12 @@ export type PurchaseOrderByWithAggregationInput = {
   assetMeasures?: Prisma.SortOrderInput | Prisma.SortOrder
   purchaseStatus?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
+  unavailableReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  unavailableNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PurchaseCountOrderByAggregateInput
@@ -339,7 +408,12 @@ export type PurchaseScalarWhereWithAggregatesInput = {
   assetMeasures?: Prisma.StringNullableWithAggregatesFilter<"Purchase"> | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusWithAggregatesFilter<"Purchase"> | $Enums.PurchaseStatus
   price?: Prisma.DecimalWithAggregatesFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.DecimalNullableWithAggregatesFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalWithAggregatesFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.UuidNullableWithAggregatesFilter<"Purchase"> | string | null
+  unavailableQuantity?: Prisma.IntWithAggregatesFilter<"Purchase"> | number
+  unavailableReason?: Prisma.EnumUnavailableReasonNullableWithAggregatesFilter<"Purchase"> | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.StringNullableWithAggregatesFilter<"Purchase"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Purchase"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Purchase"> | Date | string
 }
@@ -353,10 +427,16 @@ export type PurchaseCreateInput = {
   assetMeasures?: string | null
   purchaseStatus?: $Enums.PurchaseStatus
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  setItems?: Prisma.AssetItemCreateNestedManyWithoutPurchaseInput
+  category?: Prisma.CategoryCreateNestedOneWithoutPurchasesInput
+  eventItems?: Prisma.EventItemCreateNestedManyWithoutPurchaseInput
+  fixedInSets?: Prisma.AssetFixedItemCreateNestedManyWithoutPurchaseInput
 }
 
 export type PurchaseUncheckedCreateInput = {
@@ -368,10 +448,16 @@ export type PurchaseUncheckedCreateInput = {
   assetMeasures?: string | null
   purchaseStatus?: $Enums.PurchaseStatus
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: string | null
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  setItems?: Prisma.AssetItemUncheckedCreateNestedManyWithoutPurchaseInput
+  eventItems?: Prisma.EventItemUncheckedCreateNestedManyWithoutPurchaseInput
+  fixedInSets?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutPurchaseInput
 }
 
 export type PurchaseUpdateInput = {
@@ -383,10 +469,16 @@ export type PurchaseUpdateInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  setItems?: Prisma.AssetItemUpdateManyWithoutPurchaseNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutPurchasesNestedInput
+  eventItems?: Prisma.EventItemUpdateManyWithoutPurchaseNestedInput
+  fixedInSets?: Prisma.AssetFixedItemUpdateManyWithoutPurchaseNestedInput
 }
 
 export type PurchaseUncheckedUpdateInput = {
@@ -398,10 +490,16 @@ export type PurchaseUncheckedUpdateInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  setItems?: Prisma.AssetItemUncheckedUpdateManyWithoutPurchaseNestedInput
+  eventItems?: Prisma.EventItemUncheckedUpdateManyWithoutPurchaseNestedInput
+  fixedInSets?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutPurchaseNestedInput
 }
 
 export type PurchaseCreateManyInput = {
@@ -413,7 +511,12 @@ export type PurchaseCreateManyInput = {
   assetMeasures?: string | null
   purchaseStatus?: $Enums.PurchaseStatus
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: string | null
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -427,7 +530,11 @@ export type PurchaseUpdateManyMutationInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -441,9 +548,29 @@ export type PurchaseUncheckedUpdateManyInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PurchaseListRelationFilter = {
+  every?: Prisma.PurchaseWhereInput
+  some?: Prisma.PurchaseWhereInput
+  none?: Prisma.PurchaseWhereInput
+}
+
+export type PurchaseOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type PurchaseScalarRelationFilter = {
+  is?: Prisma.PurchaseWhereInput
+  isNot?: Prisma.PurchaseWhereInput
 }
 
 export type PurchaseCountOrderByAggregateInput = {
@@ -455,7 +582,12 @@ export type PurchaseCountOrderByAggregateInput = {
   assetMeasures?: Prisma.SortOrder
   purchaseStatus?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
+  unavailableReason?: Prisma.SortOrder
+  unavailableNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -463,7 +595,9 @@ export type PurchaseCountOrderByAggregateInput = {
 export type PurchaseAvgOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
 }
 
 export type PurchaseMaxOrderByAggregateInput = {
@@ -475,7 +609,12 @@ export type PurchaseMaxOrderByAggregateInput = {
   assetMeasures?: Prisma.SortOrder
   purchaseStatus?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
+  unavailableReason?: Prisma.SortOrder
+  unavailableNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -489,7 +628,12 @@ export type PurchaseMinOrderByAggregateInput = {
   assetMeasures?: Prisma.SortOrder
   purchaseStatus?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
+  unavailableReason?: Prisma.SortOrder
+  unavailableNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -497,33 +641,90 @@ export type PurchaseMinOrderByAggregateInput = {
 export type PurchaseSumOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  rentalPrice?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
+  unavailableQuantity?: Prisma.SortOrder
 }
 
-export type PurchaseScalarRelationFilter = {
-  is?: Prisma.PurchaseWhereInput
-  isNot?: Prisma.PurchaseWhereInput
+export type PurchaseCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput> | Prisma.PurchaseCreateWithoutCategoryInput[] | Prisma.PurchaseUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutCategoryInput | Prisma.PurchaseCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PurchaseCreateManyCategoryInputEnvelope
+  connect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+}
+
+export type PurchaseUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput> | Prisma.PurchaseCreateWithoutCategoryInput[] | Prisma.PurchaseUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutCategoryInput | Prisma.PurchaseCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PurchaseCreateManyCategoryInputEnvelope
+  connect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+}
+
+export type PurchaseUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput> | Prisma.PurchaseCreateWithoutCategoryInput[] | Prisma.PurchaseUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutCategoryInput | Prisma.PurchaseCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PurchaseUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PurchaseUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PurchaseCreateManyCategoryInputEnvelope
+  set?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  disconnect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  delete?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  connect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  update?: Prisma.PurchaseUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PurchaseUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PurchaseUpdateManyWithWhereWithoutCategoryInput | Prisma.PurchaseUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PurchaseScalarWhereInput | Prisma.PurchaseScalarWhereInput[]
+}
+
+export type PurchaseUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput> | Prisma.PurchaseCreateWithoutCategoryInput[] | Prisma.PurchaseUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutCategoryInput | Prisma.PurchaseCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PurchaseUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PurchaseUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PurchaseCreateManyCategoryInputEnvelope
+  set?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  disconnect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  delete?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  connect?: Prisma.PurchaseWhereUniqueInput | Prisma.PurchaseWhereUniqueInput[]
+  update?: Prisma.PurchaseUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PurchaseUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PurchaseUpdateManyWithWhereWithoutCategoryInput | Prisma.PurchaseUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PurchaseScalarWhereInput | Prisma.PurchaseScalarWhereInput[]
+}
+
+export type PurchaseCreateNestedOneWithoutFixedInSetsInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedCreateWithoutFixedInSetsInput>
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutFixedInSetsInput
+  connect?: Prisma.PurchaseWhereUniqueInput
+}
+
+export type PurchaseUpdateOneRequiredWithoutFixedInSetsNestedInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedCreateWithoutFixedInSetsInput>
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutFixedInSetsInput
+  upsert?: Prisma.PurchaseUpsertWithoutFixedInSetsInput
+  connect?: Prisma.PurchaseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PurchaseUpdateToOneWithWhereWithoutFixedInSetsInput, Prisma.PurchaseUpdateWithoutFixedInSetsInput>, Prisma.PurchaseUncheckedUpdateWithoutFixedInSetsInput>
+}
+
+export type PurchaseCreateNestedOneWithoutEventItemsInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutEventItemsInput, Prisma.PurchaseUncheckedCreateWithoutEventItemsInput>
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutEventItemsInput
+  connect?: Prisma.PurchaseWhereUniqueInput
+}
+
+export type PurchaseUpdateOneRequiredWithoutEventItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutEventItemsInput, Prisma.PurchaseUncheckedCreateWithoutEventItemsInput>
+  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutEventItemsInput
+  upsert?: Prisma.PurchaseUpsertWithoutEventItemsInput
+  connect?: Prisma.PurchaseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PurchaseUpdateToOneWithWhereWithoutEventItemsInput, Prisma.PurchaseUpdateWithoutEventItemsInput>, Prisma.PurchaseUncheckedUpdateWithoutEventItemsInput>
 }
 
 export type EnumPurchaseStatusFieldUpdateOperationsInput = {
   set?: $Enums.PurchaseStatus
 }
 
-export type PurchaseCreateNestedOneWithoutSetItemsInput = {
-  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutSetItemsInput, Prisma.PurchaseUncheckedCreateWithoutSetItemsInput>
-  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutSetItemsInput
-  connect?: Prisma.PurchaseWhereUniqueInput
+export type NullableEnumUnavailableReasonFieldUpdateOperationsInput = {
+  set?: $Enums.UnavailableReason | null
 }
 
-export type PurchaseUpdateOneRequiredWithoutSetItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.PurchaseCreateWithoutSetItemsInput, Prisma.PurchaseUncheckedCreateWithoutSetItemsInput>
-  connectOrCreate?: Prisma.PurchaseCreateOrConnectWithoutSetItemsInput
-  upsert?: Prisma.PurchaseUpsertWithoutSetItemsInput
-  connect?: Prisma.PurchaseWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PurchaseUpdateToOneWithWhereWithoutSetItemsInput, Prisma.PurchaseUpdateWithoutSetItemsInput>, Prisma.PurchaseUncheckedUpdateWithoutSetItemsInput>
-}
-
-export type PurchaseCreateWithoutSetItemsInput = {
+export type PurchaseCreateWithoutCategoryInput = {
   purchaseId?: string
   assetName: string
   quantity?: number
@@ -532,12 +733,18 @@ export type PurchaseCreateWithoutSetItemsInput = {
   assetMeasures?: string | null
   purchaseStatus?: $Enums.PurchaseStatus
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eventItems?: Prisma.EventItemCreateNestedManyWithoutPurchaseInput
+  fixedInSets?: Prisma.AssetFixedItemCreateNestedManyWithoutPurchaseInput
 }
 
-export type PurchaseUncheckedCreateWithoutSetItemsInput = {
+export type PurchaseUncheckedCreateWithoutCategoryInput = {
   purchaseId?: string
   assetName: string
   quantity?: number
@@ -546,28 +753,122 @@ export type PurchaseUncheckedCreateWithoutSetItemsInput = {
   assetMeasures?: string | null
   purchaseStatus?: $Enums.PurchaseStatus
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  eventItems?: Prisma.EventItemUncheckedCreateNestedManyWithoutPurchaseInput
+  fixedInSets?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutPurchaseInput
 }
 
-export type PurchaseCreateOrConnectWithoutSetItemsInput = {
+export type PurchaseCreateOrConnectWithoutCategoryInput = {
   where: Prisma.PurchaseWhereUniqueInput
-  create: Prisma.XOR<Prisma.PurchaseCreateWithoutSetItemsInput, Prisma.PurchaseUncheckedCreateWithoutSetItemsInput>
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput>
 }
 
-export type PurchaseUpsertWithoutSetItemsInput = {
-  update: Prisma.XOR<Prisma.PurchaseUpdateWithoutSetItemsInput, Prisma.PurchaseUncheckedUpdateWithoutSetItemsInput>
-  create: Prisma.XOR<Prisma.PurchaseCreateWithoutSetItemsInput, Prisma.PurchaseUncheckedCreateWithoutSetItemsInput>
+export type PurchaseCreateManyCategoryInputEnvelope = {
+  data: Prisma.PurchaseCreateManyCategoryInput | Prisma.PurchaseCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type PurchaseUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PurchaseWhereUniqueInput
+  update: Prisma.XOR<Prisma.PurchaseUpdateWithoutCategoryInput, Prisma.PurchaseUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutCategoryInput, Prisma.PurchaseUncheckedCreateWithoutCategoryInput>
+}
+
+export type PurchaseUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PurchaseWhereUniqueInput
+  data: Prisma.XOR<Prisma.PurchaseUpdateWithoutCategoryInput, Prisma.PurchaseUncheckedUpdateWithoutCategoryInput>
+}
+
+export type PurchaseUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.PurchaseScalarWhereInput
+  data: Prisma.XOR<Prisma.PurchaseUpdateManyMutationInput, Prisma.PurchaseUncheckedUpdateManyWithoutCategoryInput>
+}
+
+export type PurchaseScalarWhereInput = {
+  AND?: Prisma.PurchaseScalarWhereInput | Prisma.PurchaseScalarWhereInput[]
+  OR?: Prisma.PurchaseScalarWhereInput[]
+  NOT?: Prisma.PurchaseScalarWhereInput | Prisma.PurchaseScalarWhereInput[]
+  purchaseId?: Prisma.UuidFilter<"Purchase"> | string
+  assetName?: Prisma.StringFilter<"Purchase"> | string
+  quantity?: Prisma.IntFilter<"Purchase"> | number
+  provider?: Prisma.StringFilter<"Purchase"> | string
+  assetColor?: Prisma.StringNullableFilter<"Purchase"> | string | null
+  assetMeasures?: Prisma.StringNullableFilter<"Purchase"> | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFilter<"Purchase"> | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.DecimalNullableFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFilter<"Purchase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.UuidNullableFilter<"Purchase"> | string | null
+  unavailableQuantity?: Prisma.IntFilter<"Purchase"> | number
+  unavailableReason?: Prisma.EnumUnavailableReasonNullableFilter<"Purchase"> | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.StringNullableFilter<"Purchase"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Purchase"> | Date | string
+}
+
+export type PurchaseCreateWithoutFixedInSetsInput = {
+  purchaseId?: string
+  assetName: string
+  quantity?: number
+  provider: string
+  assetColor?: string | null
+  assetMeasures?: string | null
+  purchaseStatus?: $Enums.PurchaseStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category?: Prisma.CategoryCreateNestedOneWithoutPurchasesInput
+  eventItems?: Prisma.EventItemCreateNestedManyWithoutPurchaseInput
+}
+
+export type PurchaseUncheckedCreateWithoutFixedInSetsInput = {
+  purchaseId?: string
+  assetName: string
+  quantity?: number
+  provider: string
+  assetColor?: string | null
+  assetMeasures?: string | null
+  purchaseStatus?: $Enums.PurchaseStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: string | null
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  eventItems?: Prisma.EventItemUncheckedCreateNestedManyWithoutPurchaseInput
+}
+
+export type PurchaseCreateOrConnectWithoutFixedInSetsInput = {
+  where: Prisma.PurchaseWhereUniqueInput
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedCreateWithoutFixedInSetsInput>
+}
+
+export type PurchaseUpsertWithoutFixedInSetsInput = {
+  update: Prisma.XOR<Prisma.PurchaseUpdateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedUpdateWithoutFixedInSetsInput>
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedCreateWithoutFixedInSetsInput>
   where?: Prisma.PurchaseWhereInput
 }
 
-export type PurchaseUpdateToOneWithWhereWithoutSetItemsInput = {
+export type PurchaseUpdateToOneWithWhereWithoutFixedInSetsInput = {
   where?: Prisma.PurchaseWhereInput
-  data: Prisma.XOR<Prisma.PurchaseUpdateWithoutSetItemsInput, Prisma.PurchaseUncheckedUpdateWithoutSetItemsInput>
+  data: Prisma.XOR<Prisma.PurchaseUpdateWithoutFixedInSetsInput, Prisma.PurchaseUncheckedUpdateWithoutFixedInSetsInput>
 }
 
-export type PurchaseUpdateWithoutSetItemsInput = {
+export type PurchaseUpdateWithoutFixedInSetsInput = {
   purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -576,12 +877,18 @@ export type PurchaseUpdateWithoutSetItemsInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.CategoryUpdateOneWithoutPurchasesNestedInput
+  eventItems?: Prisma.EventItemUpdateManyWithoutPurchaseNestedInput
 }
 
-export type PurchaseUncheckedUpdateWithoutSetItemsInput = {
+export type PurchaseUncheckedUpdateWithoutFixedInSetsInput = {
   purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -590,7 +897,185 @@ export type PurchaseUncheckedUpdateWithoutSetItemsInput = {
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventItems?: Prisma.EventItemUncheckedUpdateManyWithoutPurchaseNestedInput
+}
+
+export type PurchaseCreateWithoutEventItemsInput = {
+  purchaseId?: string
+  assetName: string
+  quantity?: number
+  provider: string
+  assetColor?: string | null
+  assetMeasures?: string | null
+  purchaseStatus?: $Enums.PurchaseStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category?: Prisma.CategoryCreateNestedOneWithoutPurchasesInput
+  fixedInSets?: Prisma.AssetFixedItemCreateNestedManyWithoutPurchaseInput
+}
+
+export type PurchaseUncheckedCreateWithoutEventItemsInput = {
+  purchaseId?: string
+  assetName: string
+  quantity?: number
+  provider: string
+  assetColor?: string | null
+  assetMeasures?: string | null
+  purchaseStatus?: $Enums.PurchaseStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: string | null
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  fixedInSets?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutPurchaseInput
+}
+
+export type PurchaseCreateOrConnectWithoutEventItemsInput = {
+  where: Prisma.PurchaseWhereUniqueInput
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutEventItemsInput, Prisma.PurchaseUncheckedCreateWithoutEventItemsInput>
+}
+
+export type PurchaseUpsertWithoutEventItemsInput = {
+  update: Prisma.XOR<Prisma.PurchaseUpdateWithoutEventItemsInput, Prisma.PurchaseUncheckedUpdateWithoutEventItemsInput>
+  create: Prisma.XOR<Prisma.PurchaseCreateWithoutEventItemsInput, Prisma.PurchaseUncheckedCreateWithoutEventItemsInput>
+  where?: Prisma.PurchaseWhereInput
+}
+
+export type PurchaseUpdateToOneWithWhereWithoutEventItemsInput = {
+  where?: Prisma.PurchaseWhereInput
+  data: Prisma.XOR<Prisma.PurchaseUpdateWithoutEventItemsInput, Prisma.PurchaseUncheckedUpdateWithoutEventItemsInput>
+}
+
+export type PurchaseUpdateWithoutEventItemsInput = {
+  purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.CategoryUpdateOneWithoutPurchasesNestedInput
+  fixedInSets?: Prisma.AssetFixedItemUpdateManyWithoutPurchaseNestedInput
+}
+
+export type PurchaseUncheckedUpdateWithoutEventItemsInput = {
+  purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fixedInSets?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutPurchaseNestedInput
+}
+
+export type PurchaseCreateManyCategoryInput = {
+  purchaseId?: string
+  assetName: string
+  quantity?: number
+  provider: string
+  assetColor?: string | null
+  assetMeasures?: string | null
+  purchaseStatus?: $Enums.PurchaseStatus
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: number
+  unavailableReason?: $Enums.UnavailableReason | null
+  unavailableNote?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PurchaseUpdateWithoutCategoryInput = {
+  purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventItems?: Prisma.EventItemUpdateManyWithoutPurchaseNestedInput
+  fixedInSets?: Prisma.AssetFixedItemUpdateManyWithoutPurchaseNestedInput
+}
+
+export type PurchaseUncheckedUpdateWithoutCategoryInput = {
+  purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventItems?: Prisma.EventItemUncheckedUpdateManyWithoutPurchaseNestedInput
+  fixedInSets?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutPurchaseNestedInput
+}
+
+export type PurchaseUncheckedUpdateManyWithoutCategoryInput = {
+  purchaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseStatus?: Prisma.EnumPurchaseStatusFieldUpdateOperationsInput | $Enums.PurchaseStatus
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentalPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  unavailableQuantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unavailableReason?: Prisma.NullableEnumUnavailableReasonFieldUpdateOperationsInput | $Enums.UnavailableReason | null
+  unavailableNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -601,11 +1086,13 @@ export type PurchaseUncheckedUpdateWithoutSetItemsInput = {
  */
 
 export type PurchaseCountOutputType = {
-  setItems: number
+  eventItems: number
+  fixedInSets: number
 }
 
 export type PurchaseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  setItems?: boolean | PurchaseCountOutputTypeCountSetItemsArgs
+  eventItems?: boolean | PurchaseCountOutputTypeCountEventItemsArgs
+  fixedInSets?: boolean | PurchaseCountOutputTypeCountFixedInSetsArgs
 }
 
 /**
@@ -621,8 +1108,15 @@ export type PurchaseCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * PurchaseCountOutputType without action
  */
-export type PurchaseCountOutputTypeCountSetItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetItemWhereInput
+export type PurchaseCountOutputTypeCountEventItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventItemWhereInput
+}
+
+/**
+ * PurchaseCountOutputType without action
+ */
+export type PurchaseCountOutputTypeCountFixedInSetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssetFixedItemWhereInput
 }
 
 
@@ -635,10 +1129,17 @@ export type PurchaseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   assetMeasures?: boolean
   purchaseStatus?: boolean
   price?: boolean
+  rentalPrice?: boolean
   totalAmount?: boolean
+  categoryId?: boolean
+  unavailableQuantity?: boolean
+  unavailableReason?: boolean
+  unavailableNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  setItems?: boolean | Prisma.Purchase$setItemsArgs<ExtArgs>
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
+  eventItems?: boolean | Prisma.Purchase$eventItemsArgs<ExtArgs>
+  fixedInSets?: boolean | Prisma.Purchase$fixedInSetsArgs<ExtArgs>
   _count?: boolean | Prisma.PurchaseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["purchase"]>
 
@@ -651,9 +1152,15 @@ export type PurchaseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   assetMeasures?: boolean
   purchaseStatus?: boolean
   price?: boolean
+  rentalPrice?: boolean
   totalAmount?: boolean
+  categoryId?: boolean
+  unavailableQuantity?: boolean
+  unavailableReason?: boolean
+  unavailableNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["purchase"]>
 
 export type PurchaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -665,9 +1172,15 @@ export type PurchaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   assetMeasures?: boolean
   purchaseStatus?: boolean
   price?: boolean
+  rentalPrice?: boolean
   totalAmount?: boolean
+  categoryId?: boolean
+  unavailableQuantity?: boolean
+  unavailableReason?: boolean
+  unavailableNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["purchase"]>
 
 export type PurchaseSelectScalar = {
@@ -679,23 +1192,36 @@ export type PurchaseSelectScalar = {
   assetMeasures?: boolean
   purchaseStatus?: boolean
   price?: boolean
+  rentalPrice?: boolean
   totalAmount?: boolean
+  categoryId?: boolean
+  unavailableQuantity?: boolean
+  unavailableReason?: boolean
+  unavailableNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PurchaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"purchaseId" | "assetName" | "quantity" | "provider" | "assetColor" | "assetMeasures" | "purchaseStatus" | "price" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["purchase"]>
+export type PurchaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"purchaseId" | "assetName" | "quantity" | "provider" | "assetColor" | "assetMeasures" | "purchaseStatus" | "price" | "rentalPrice" | "totalAmount" | "categoryId" | "unavailableQuantity" | "unavailableReason" | "unavailableNote" | "createdAt" | "updatedAt", ExtArgs["result"]["purchase"]>
 export type PurchaseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  setItems?: boolean | Prisma.Purchase$setItemsArgs<ExtArgs>
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
+  eventItems?: boolean | Prisma.Purchase$eventItemsArgs<ExtArgs>
+  fixedInSets?: boolean | Prisma.Purchase$fixedInSetsArgs<ExtArgs>
   _count?: boolean | Prisma.PurchaseCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PurchaseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type PurchaseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PurchaseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
+}
+export type PurchaseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.Purchase$categoryArgs<ExtArgs>
+}
 
 export type $PurchasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Purchase"
   objects: {
-    setItems: Prisma.$AssetItemPayload<ExtArgs>[]
+    category: Prisma.$CategoryPayload<ExtArgs> | null
+    eventItems: Prisma.$EventItemPayload<ExtArgs>[]
+    fixedInSets: Prisma.$AssetFixedItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     purchaseId: string
@@ -706,7 +1232,12 @@ export type $PurchasePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     assetMeasures: string | null
     purchaseStatus: $Enums.PurchaseStatus
     price: runtime.Decimal
+    rentalPrice: runtime.Decimal | null
     totalAmount: runtime.Decimal
+    categoryId: string | null
+    unavailableQuantity: number
+    unavailableReason: $Enums.UnavailableReason | null
+    unavailableNote: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["purchase"]>
@@ -1103,7 +1634,9 @@ readonly fields: PurchaseFieldRefs;
  */
 export interface Prisma__PurchaseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  setItems<T extends Prisma.Purchase$setItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Purchase$setItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  category<T extends Prisma.Purchase$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Purchase$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  eventItems<T extends Prisma.Purchase$eventItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Purchase$eventItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fixedInSets<T extends Prisma.Purchase$fixedInSetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Purchase$fixedInSetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetFixedItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1141,7 +1674,12 @@ export interface PurchaseFieldRefs {
   readonly assetMeasures: Prisma.FieldRef<"Purchase", 'String'>
   readonly purchaseStatus: Prisma.FieldRef<"Purchase", 'PurchaseStatus'>
   readonly price: Prisma.FieldRef<"Purchase", 'Decimal'>
+  readonly rentalPrice: Prisma.FieldRef<"Purchase", 'Decimal'>
   readonly totalAmount: Prisma.FieldRef<"Purchase", 'Decimal'>
+  readonly categoryId: Prisma.FieldRef<"Purchase", 'String'>
+  readonly unavailableQuantity: Prisma.FieldRef<"Purchase", 'Int'>
+  readonly unavailableReason: Prisma.FieldRef<"Purchase", 'UnavailableReason'>
+  readonly unavailableNote: Prisma.FieldRef<"Purchase", 'String'>
   readonly createdAt: Prisma.FieldRef<"Purchase", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Purchase", 'DateTime'>
 }
@@ -1398,6 +1936,10 @@ export type PurchaseCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.PurchaseCreateManyInput | Prisma.PurchaseCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PurchaseIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1468,6 +2010,10 @@ export type PurchaseUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many Purchases to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PurchaseIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1537,27 +2083,70 @@ export type PurchaseDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Purchase.setItems
+ * Purchase.category
  */
-export type Purchase$setItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Purchase$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AssetItem
+   * Select specific fields to fetch from the Category
    */
-  select?: Prisma.AssetItemSelect<ExtArgs> | null
+  select?: Prisma.CategorySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AssetItem
+   * Omit specific fields from the Category
    */
-  omit?: Prisma.AssetItemOmit<ExtArgs> | null
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AssetItemInclude<ExtArgs> | null
-  where?: Prisma.AssetItemWhereInput
-  orderBy?: Prisma.AssetItemOrderByWithRelationInput | Prisma.AssetItemOrderByWithRelationInput[]
-  cursor?: Prisma.AssetItemWhereUniqueInput
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
+}
+
+/**
+ * Purchase.eventItems
+ */
+export type Purchase$eventItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventItem
+   */
+  select?: Prisma.EventItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventItem
+   */
+  omit?: Prisma.EventItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventItemInclude<ExtArgs> | null
+  where?: Prisma.EventItemWhereInput
+  orderBy?: Prisma.EventItemOrderByWithRelationInput | Prisma.EventItemOrderByWithRelationInput[]
+  cursor?: Prisma.EventItemWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.AssetItemScalarFieldEnum | Prisma.AssetItemScalarFieldEnum[]
+  distinct?: Prisma.EventItemScalarFieldEnum | Prisma.EventItemScalarFieldEnum[]
+}
+
+/**
+ * Purchase.fixedInSets
+ */
+export type Purchase$fixedInSetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssetFixedItem
+   */
+  select?: Prisma.AssetFixedItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssetFixedItem
+   */
+  omit?: Prisma.AssetFixedItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssetFixedItemInclude<ExtArgs> | null
+  where?: Prisma.AssetFixedItemWhereInput
+  orderBy?: Prisma.AssetFixedItemOrderByWithRelationInput | Prisma.AssetFixedItemOrderByWithRelationInput[]
+  cursor?: Prisma.AssetFixedItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssetFixedItemScalarFieldEnum | Prisma.AssetFixedItemScalarFieldEnum[]
 }
 
 /**

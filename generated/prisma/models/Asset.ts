@@ -204,7 +204,7 @@ export type AssetGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type AssetGroupByOutputType = {
   assetId: string
   assetName: string
-  assetAmount: number
+  assetAmount: number | null
   assetColor: string | null
   assetMeasures: string | null
   assetPrice: runtime.Decimal
@@ -238,26 +238,28 @@ export type AssetWhereInput = {
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   assetId?: Prisma.UuidFilter<"Asset"> | string
   assetName?: Prisma.StringFilter<"Asset"> | string
-  assetAmount?: Prisma.IntFilter<"Asset"> | number
+  assetAmount?: Prisma.IntNullableFilter<"Asset"> | number | null
   assetColor?: Prisma.StringNullableFilter<"Asset"> | string | null
   assetMeasures?: Prisma.StringNullableFilter<"Asset"> | string | null
   assetPrice?: Prisma.DecimalFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
-  items?: Prisma.AssetItemListRelationFilter
+  slots?: Prisma.AssetSlotListRelationFilter
+  fixedItems?: Prisma.AssetFixedItemListRelationFilter
   events?: Prisma.EventAssetListRelationFilter
 }
 
 export type AssetOrderByWithRelationInput = {
   assetId?: Prisma.SortOrder
   assetName?: Prisma.SortOrder
-  assetAmount?: Prisma.SortOrder
+  assetAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   assetColor?: Prisma.SortOrderInput | Prisma.SortOrder
   assetMeasures?: Prisma.SortOrderInput | Prisma.SortOrder
   assetPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  items?: Prisma.AssetItemOrderByRelationAggregateInput
+  slots?: Prisma.AssetSlotOrderByRelationAggregateInput
+  fixedItems?: Prisma.AssetFixedItemOrderByRelationAggregateInput
   events?: Prisma.EventAssetOrderByRelationAggregateInput
 }
 
@@ -267,20 +269,21 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   OR?: Prisma.AssetWhereInput[]
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
-  assetAmount?: Prisma.IntFilter<"Asset"> | number
+  assetAmount?: Prisma.IntNullableFilter<"Asset"> | number | null
   assetColor?: Prisma.StringNullableFilter<"Asset"> | string | null
   assetMeasures?: Prisma.StringNullableFilter<"Asset"> | string | null
   assetPrice?: Prisma.DecimalFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
-  items?: Prisma.AssetItemListRelationFilter
+  slots?: Prisma.AssetSlotListRelationFilter
+  fixedItems?: Prisma.AssetFixedItemListRelationFilter
   events?: Prisma.EventAssetListRelationFilter
 }, "assetId" | "assetName">
 
 export type AssetOrderByWithAggregationInput = {
   assetId?: Prisma.SortOrder
   assetName?: Prisma.SortOrder
-  assetAmount?: Prisma.SortOrder
+  assetAmount?: Prisma.SortOrderInput | Prisma.SortOrder
   assetColor?: Prisma.SortOrderInput | Prisma.SortOrder
   assetMeasures?: Prisma.SortOrderInput | Prisma.SortOrder
   assetPrice?: Prisma.SortOrder
@@ -299,7 +302,7 @@ export type AssetScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AssetScalarWhereWithAggregatesInput | Prisma.AssetScalarWhereWithAggregatesInput[]
   assetId?: Prisma.UuidWithAggregatesFilter<"Asset"> | string
   assetName?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  assetAmount?: Prisma.IntWithAggregatesFilter<"Asset"> | number
+  assetAmount?: Prisma.IntNullableWithAggregatesFilter<"Asset"> | number | null
   assetColor?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   assetMeasures?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   assetPrice?: Prisma.DecimalWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -310,59 +313,63 @@ export type AssetScalarWhereWithAggregatesInput = {
 export type AssetCreateInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  items?: Prisma.AssetItemCreateNestedManyWithoutAssetInput
+  slots?: Prisma.AssetSlotCreateNestedManyWithoutAssetInput
+  fixedItems?: Prisma.AssetFixedItemCreateNestedManyWithoutAssetInput
   events?: Prisma.EventAssetCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUncheckedCreateInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  items?: Prisma.AssetItemUncheckedCreateNestedManyWithoutAssetInput
+  slots?: Prisma.AssetSlotUncheckedCreateNestedManyWithoutAssetInput
+  fixedItems?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutAssetInput
   events?: Prisma.EventAssetUncheckedCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUpdateInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  items?: Prisma.AssetItemUpdateManyWithoutAssetNestedInput
+  slots?: Prisma.AssetSlotUpdateManyWithoutAssetNestedInput
+  fixedItems?: Prisma.AssetFixedItemUpdateManyWithoutAssetNestedInput
   events?: Prisma.EventAssetUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetUncheckedUpdateInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  items?: Prisma.AssetItemUncheckedUpdateManyWithoutAssetNestedInput
+  slots?: Prisma.AssetSlotUncheckedUpdateManyWithoutAssetNestedInput
+  fixedItems?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutAssetNestedInput
   events?: Prisma.EventAssetUncheckedUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetCreateManyInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -373,7 +380,7 @@ export type AssetCreateManyInput = {
 export type AssetUpdateManyMutationInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -384,7 +391,7 @@ export type AssetUpdateManyMutationInput = {
 export type AssetUncheckedUpdateManyInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -440,12 +447,8 @@ export type AssetScalarRelationFilter = {
   isNot?: Prisma.AssetWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -464,22 +467,32 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type AssetCreateNestedOneWithoutItemsInput = {
-  create?: Prisma.XOR<Prisma.AssetCreateWithoutItemsInput, Prisma.AssetUncheckedCreateWithoutItemsInput>
-  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutItemsInput
+export type AssetCreateNestedOneWithoutSlotsInput = {
+  create?: Prisma.XOR<Prisma.AssetCreateWithoutSlotsInput, Prisma.AssetUncheckedCreateWithoutSlotsInput>
+  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutSlotsInput
   connect?: Prisma.AssetWhereUniqueInput
 }
 
-export type AssetUpdateOneRequiredWithoutItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.AssetCreateWithoutItemsInput, Prisma.AssetUncheckedCreateWithoutItemsInput>
-  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutItemsInput
-  upsert?: Prisma.AssetUpsertWithoutItemsInput
+export type AssetUpdateOneRequiredWithoutSlotsNestedInput = {
+  create?: Prisma.XOR<Prisma.AssetCreateWithoutSlotsInput, Prisma.AssetUncheckedCreateWithoutSlotsInput>
+  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutSlotsInput
+  upsert?: Prisma.AssetUpsertWithoutSlotsInput
   connect?: Prisma.AssetWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AssetUpdateToOneWithWhereWithoutItemsInput, Prisma.AssetUpdateWithoutItemsInput>, Prisma.AssetUncheckedUpdateWithoutItemsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AssetUpdateToOneWithWhereWithoutSlotsInput, Prisma.AssetUpdateWithoutSlotsInput>, Prisma.AssetUncheckedUpdateWithoutSlotsInput>
+}
+
+export type AssetCreateNestedOneWithoutFixedItemsInput = {
+  create?: Prisma.XOR<Prisma.AssetCreateWithoutFixedItemsInput, Prisma.AssetUncheckedCreateWithoutFixedItemsInput>
+  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutFixedItemsInput
+  connect?: Prisma.AssetWhereUniqueInput
+}
+
+export type AssetUpdateOneRequiredWithoutFixedItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.AssetCreateWithoutFixedItemsInput, Prisma.AssetUncheckedCreateWithoutFixedItemsInput>
+  connectOrCreate?: Prisma.AssetCreateOrConnectWithoutFixedItemsInput
+  upsert?: Prisma.AssetUpsertWithoutFixedItemsInput
+  connect?: Prisma.AssetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AssetUpdateToOneWithWhereWithoutFixedItemsInput, Prisma.AssetUpdateWithoutFixedItemsInput>, Prisma.AssetUncheckedUpdateWithoutFixedItemsInput>
 }
 
 export type AssetCreateNestedOneWithoutEventsInput = {
@@ -496,92 +509,166 @@ export type AssetUpdateOneRequiredWithoutEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AssetUpdateToOneWithWhereWithoutEventsInput, Prisma.AssetUpdateWithoutEventsInput>, Prisma.AssetUncheckedUpdateWithoutEventsInput>
 }
 
-export type AssetCreateWithoutItemsInput = {
+export type AssetCreateWithoutSlotsInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fixedItems?: Prisma.AssetFixedItemCreateNestedManyWithoutAssetInput
   events?: Prisma.EventAssetCreateNestedManyWithoutAssetInput
 }
 
-export type AssetUncheckedCreateWithoutItemsInput = {
+export type AssetUncheckedCreateWithoutSlotsInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  fixedItems?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutAssetInput
   events?: Prisma.EventAssetUncheckedCreateNestedManyWithoutAssetInput
 }
 
-export type AssetCreateOrConnectWithoutItemsInput = {
+export type AssetCreateOrConnectWithoutSlotsInput = {
   where: Prisma.AssetWhereUniqueInput
-  create: Prisma.XOR<Prisma.AssetCreateWithoutItemsInput, Prisma.AssetUncheckedCreateWithoutItemsInput>
+  create: Prisma.XOR<Prisma.AssetCreateWithoutSlotsInput, Prisma.AssetUncheckedCreateWithoutSlotsInput>
 }
 
-export type AssetUpsertWithoutItemsInput = {
-  update: Prisma.XOR<Prisma.AssetUpdateWithoutItemsInput, Prisma.AssetUncheckedUpdateWithoutItemsInput>
-  create: Prisma.XOR<Prisma.AssetCreateWithoutItemsInput, Prisma.AssetUncheckedCreateWithoutItemsInput>
+export type AssetUpsertWithoutSlotsInput = {
+  update: Prisma.XOR<Prisma.AssetUpdateWithoutSlotsInput, Prisma.AssetUncheckedUpdateWithoutSlotsInput>
+  create: Prisma.XOR<Prisma.AssetCreateWithoutSlotsInput, Prisma.AssetUncheckedCreateWithoutSlotsInput>
   where?: Prisma.AssetWhereInput
 }
 
-export type AssetUpdateToOneWithWhereWithoutItemsInput = {
+export type AssetUpdateToOneWithWhereWithoutSlotsInput = {
   where?: Prisma.AssetWhereInput
-  data: Prisma.XOR<Prisma.AssetUpdateWithoutItemsInput, Prisma.AssetUncheckedUpdateWithoutItemsInput>
+  data: Prisma.XOR<Prisma.AssetUpdateWithoutSlotsInput, Prisma.AssetUncheckedUpdateWithoutSlotsInput>
 }
 
-export type AssetUpdateWithoutItemsInput = {
+export type AssetUpdateWithoutSlotsInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fixedItems?: Prisma.AssetFixedItemUpdateManyWithoutAssetNestedInput
   events?: Prisma.EventAssetUpdateManyWithoutAssetNestedInput
 }
 
-export type AssetUncheckedUpdateWithoutItemsInput = {
+export type AssetUncheckedUpdateWithoutSlotsInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fixedItems?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutAssetNestedInput
+  events?: Prisma.EventAssetUncheckedUpdateManyWithoutAssetNestedInput
+}
+
+export type AssetCreateWithoutFixedItemsInput = {
+  assetId?: string
+  assetName: string
+  assetAmount?: number | null
+  assetColor?: string | null
+  assetMeasures?: string | null
+  assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  slots?: Prisma.AssetSlotCreateNestedManyWithoutAssetInput
+  events?: Prisma.EventAssetCreateNestedManyWithoutAssetInput
+}
+
+export type AssetUncheckedCreateWithoutFixedItemsInput = {
+  assetId?: string
+  assetName: string
+  assetAmount?: number | null
+  assetColor?: string | null
+  assetMeasures?: string | null
+  assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  slots?: Prisma.AssetSlotUncheckedCreateNestedManyWithoutAssetInput
+  events?: Prisma.EventAssetUncheckedCreateNestedManyWithoutAssetInput
+}
+
+export type AssetCreateOrConnectWithoutFixedItemsInput = {
+  where: Prisma.AssetWhereUniqueInput
+  create: Prisma.XOR<Prisma.AssetCreateWithoutFixedItemsInput, Prisma.AssetUncheckedCreateWithoutFixedItemsInput>
+}
+
+export type AssetUpsertWithoutFixedItemsInput = {
+  update: Prisma.XOR<Prisma.AssetUpdateWithoutFixedItemsInput, Prisma.AssetUncheckedUpdateWithoutFixedItemsInput>
+  create: Prisma.XOR<Prisma.AssetCreateWithoutFixedItemsInput, Prisma.AssetUncheckedCreateWithoutFixedItemsInput>
+  where?: Prisma.AssetWhereInput
+}
+
+export type AssetUpdateToOneWithWhereWithoutFixedItemsInput = {
+  where?: Prisma.AssetWhereInput
+  data: Prisma.XOR<Prisma.AssetUpdateWithoutFixedItemsInput, Prisma.AssetUncheckedUpdateWithoutFixedItemsInput>
+}
+
+export type AssetUpdateWithoutFixedItemsInput = {
+  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slots?: Prisma.AssetSlotUpdateManyWithoutAssetNestedInput
+  events?: Prisma.EventAssetUpdateManyWithoutAssetNestedInput
+}
+
+export type AssetUncheckedUpdateWithoutFixedItemsInput = {
+  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetName?: Prisma.StringFieldUpdateOperationsInput | string
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slots?: Prisma.AssetSlotUncheckedUpdateManyWithoutAssetNestedInput
   events?: Prisma.EventAssetUncheckedUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetCreateWithoutEventsInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  items?: Prisma.AssetItemCreateNestedManyWithoutAssetInput
+  slots?: Prisma.AssetSlotCreateNestedManyWithoutAssetInput
+  fixedItems?: Prisma.AssetFixedItemCreateNestedManyWithoutAssetInput
 }
 
 export type AssetUncheckedCreateWithoutEventsInput = {
   assetId?: string
   assetName: string
-  assetAmount?: number
+  assetAmount?: number | null
   assetColor?: string | null
   assetMeasures?: string | null
   assetPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  items?: Prisma.AssetItemUncheckedCreateNestedManyWithoutAssetInput
+  slots?: Prisma.AssetSlotUncheckedCreateNestedManyWithoutAssetInput
+  fixedItems?: Prisma.AssetFixedItemUncheckedCreateNestedManyWithoutAssetInput
 }
 
 export type AssetCreateOrConnectWithoutEventsInput = {
@@ -603,25 +690,27 @@ export type AssetUpdateToOneWithWhereWithoutEventsInput = {
 export type AssetUpdateWithoutEventsInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  items?: Prisma.AssetItemUpdateManyWithoutAssetNestedInput
+  slots?: Prisma.AssetSlotUpdateManyWithoutAssetNestedInput
+  fixedItems?: Prisma.AssetFixedItemUpdateManyWithoutAssetNestedInput
 }
 
 export type AssetUncheckedUpdateWithoutEventsInput = {
   assetId?: Prisma.StringFieldUpdateOperationsInput | string
   assetName?: Prisma.StringFieldUpdateOperationsInput | string
-  assetAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  assetAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   assetColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetMeasures?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assetPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  items?: Prisma.AssetItemUncheckedUpdateManyWithoutAssetNestedInput
+  slots?: Prisma.AssetSlotUncheckedUpdateManyWithoutAssetNestedInput
+  fixedItems?: Prisma.AssetFixedItemUncheckedUpdateManyWithoutAssetNestedInput
 }
 
 
@@ -630,12 +719,14 @@ export type AssetUncheckedUpdateWithoutEventsInput = {
  */
 
 export type AssetCountOutputType = {
-  items: number
+  slots: number
+  fixedItems: number
   events: number
 }
 
 export type AssetCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  items?: boolean | AssetCountOutputTypeCountItemsArgs
+  slots?: boolean | AssetCountOutputTypeCountSlotsArgs
+  fixedItems?: boolean | AssetCountOutputTypeCountFixedItemsArgs
   events?: boolean | AssetCountOutputTypeCountEventsArgs
 }
 
@@ -652,8 +743,15 @@ export type AssetCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
 /**
  * AssetCountOutputType without action
  */
-export type AssetCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetItemWhereInput
+export type AssetCountOutputTypeCountSlotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssetSlotWhereInput
+}
+
+/**
+ * AssetCountOutputType without action
+ */
+export type AssetCountOutputTypeCountFixedItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AssetFixedItemWhereInput
 }
 
 /**
@@ -673,7 +771,8 @@ export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   assetPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  items?: boolean | Prisma.Asset$itemsArgs<ExtArgs>
+  slots?: boolean | Prisma.Asset$slotsArgs<ExtArgs>
+  fixedItems?: boolean | Prisma.Asset$fixedItemsArgs<ExtArgs>
   events?: boolean | Prisma.Asset$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.AssetCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["asset"]>
@@ -713,7 +812,8 @@ export type AssetSelectScalar = {
 
 export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"assetId" | "assetName" | "assetAmount" | "assetColor" | "assetMeasures" | "assetPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
 export type AssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  items?: boolean | Prisma.Asset$itemsArgs<ExtArgs>
+  slots?: boolean | Prisma.Asset$slotsArgs<ExtArgs>
+  fixedItems?: boolean | Prisma.Asset$fixedItemsArgs<ExtArgs>
   events?: boolean | Prisma.Asset$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.AssetCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -723,13 +823,14 @@ export type AssetIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Asset"
   objects: {
-    items: Prisma.$AssetItemPayload<ExtArgs>[]
+    slots: Prisma.$AssetSlotPayload<ExtArgs>[]
+    fixedItems: Prisma.$AssetFixedItemPayload<ExtArgs>[]
     events: Prisma.$EventAssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     assetId: string
     assetName: string
-    assetAmount: number
+    assetAmount: number | null
     assetColor: string | null
     assetMeasures: string | null
     assetPrice: runtime.Decimal
@@ -1129,7 +1230,8 @@ readonly fields: AssetFieldRefs;
  */
 export interface Prisma__AssetClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  items<T extends Prisma.Asset$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Asset$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  slots<T extends Prisma.Asset$slotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Asset$slotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetSlotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fixedItems<T extends Prisma.Asset$fixedItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Asset$fixedItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetFixedItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.Asset$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Asset$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1561,27 +1663,51 @@ export type AssetDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Asset.items
+ * Asset.slots
  */
-export type Asset$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Asset$slotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AssetItem
+   * Select specific fields to fetch from the AssetSlot
    */
-  select?: Prisma.AssetItemSelect<ExtArgs> | null
+  select?: Prisma.AssetSlotSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AssetItem
+   * Omit specific fields from the AssetSlot
    */
-  omit?: Prisma.AssetItemOmit<ExtArgs> | null
+  omit?: Prisma.AssetSlotOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AssetItemInclude<ExtArgs> | null
-  where?: Prisma.AssetItemWhereInput
-  orderBy?: Prisma.AssetItemOrderByWithRelationInput | Prisma.AssetItemOrderByWithRelationInput[]
-  cursor?: Prisma.AssetItemWhereUniqueInput
+  include?: Prisma.AssetSlotInclude<ExtArgs> | null
+  where?: Prisma.AssetSlotWhereInput
+  orderBy?: Prisma.AssetSlotOrderByWithRelationInput | Prisma.AssetSlotOrderByWithRelationInput[]
+  cursor?: Prisma.AssetSlotWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.AssetItemScalarFieldEnum | Prisma.AssetItemScalarFieldEnum[]
+  distinct?: Prisma.AssetSlotScalarFieldEnum | Prisma.AssetSlotScalarFieldEnum[]
+}
+
+/**
+ * Asset.fixedItems
+ */
+export type Asset$fixedItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AssetFixedItem
+   */
+  select?: Prisma.AssetFixedItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AssetFixedItem
+   */
+  omit?: Prisma.AssetFixedItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AssetFixedItemInclude<ExtArgs> | null
+  where?: Prisma.AssetFixedItemWhereInput
+  orderBy?: Prisma.AssetFixedItemOrderByWithRelationInput | Prisma.AssetFixedItemOrderByWithRelationInput[]
+  cursor?: Prisma.AssetFixedItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssetFixedItemScalarFieldEnum | Prisma.AssetFixedItemScalarFieldEnum[]
 }
 
 /**

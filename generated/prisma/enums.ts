@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const EventItemKind = {
+  SET_FIXED: 'SET_FIXED',
+  SET_PICK: 'SET_PICK',
+  EXTRA: 'EXTRA'
+} as const
+
+export type EventItemKind = (typeof EventItemKind)[keyof typeof EventItemKind]
+
+
 export const PurchaseStatus = {
   PENDING_PURCHASE: 'PENDING_PURCHASE',
   PAID: 'PAID',
@@ -18,3 +27,11 @@ export const PurchaseStatus = {
 } as const
 
 export type PurchaseStatus = (typeof PurchaseStatus)[keyof typeof PurchaseStatus]
+
+
+export const UnavailableReason = {
+  MAINTENANCE: 'MAINTENANCE',
+  DEPRECATED: 'DEPRECATED'
+} as const
+
+export type UnavailableReason = (typeof UnavailableReason)[keyof typeof UnavailableReason]

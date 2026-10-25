@@ -59,6 +59,7 @@ export type EventMinAggregateOutputType = {
   rentTotalPrice: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
+  googleEventId: string | null
 }
 
 export type EventMaxAggregateOutputType = {
@@ -78,6 +79,7 @@ export type EventMaxAggregateOutputType = {
   rentTotalPrice: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
+  googleEventId: string | null
 }
 
 export type EventCountAggregateOutputType = {
@@ -97,6 +99,7 @@ export type EventCountAggregateOutputType = {
   rentTotalPrice: number
   createdAt: number
   updatedAt: number
+  googleEventId: number
   _all: number
 }
 
@@ -134,6 +137,7 @@ export type EventMinAggregateInputType = {
   rentTotalPrice?: true
   createdAt?: true
   updatedAt?: true
+  googleEventId?: true
 }
 
 export type EventMaxAggregateInputType = {
@@ -153,6 +157,7 @@ export type EventMaxAggregateInputType = {
   rentTotalPrice?: true
   createdAt?: true
   updatedAt?: true
+  googleEventId?: true
 }
 
 export type EventCountAggregateInputType = {
@@ -172,6 +177,7 @@ export type EventCountAggregateInputType = {
   rentTotalPrice?: true
   createdAt?: true
   updatedAt?: true
+  googleEventId?: true
   _all?: true
 }
 
@@ -278,6 +284,7 @@ export type EventGroupByOutputType = {
   rentTotalPrice: runtime.Decimal
   createdAt: Date
   updatedAt: Date
+  googleEventId: string | null
   _count: EventCountAggregateOutputType | null
   _avg: EventAvgAggregateOutputType | null
   _sum: EventSumAggregateOutputType | null
@@ -320,7 +327,9 @@ export type EventWhereInput = {
   rentTotalPrice?: Prisma.DecimalFilter<"Event"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
   assets?: Prisma.EventAssetListRelationFilter
+  items?: Prisma.EventItemListRelationFilter
 }
 
 export type EventOrderByWithRelationInput = {
@@ -340,7 +349,9 @@ export type EventOrderByWithRelationInput = {
   rentTotalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   assets?: Prisma.EventAssetOrderByRelationAggregateInput
+  items?: Prisma.EventItemOrderByRelationAggregateInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -363,7 +374,9 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   rentTotalPrice?: Prisma.DecimalFilter<"Event"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+  googleEventId?: Prisma.StringNullableFilter<"Event"> | string | null
   assets?: Prisma.EventAssetListRelationFilter
+  items?: Prisma.EventItemListRelationFilter
 }, "eventNo">
 
 export type EventOrderByWithAggregationInput = {
@@ -383,6 +396,7 @@ export type EventOrderByWithAggregationInput = {
   rentTotalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
   _avg?: Prisma.EventAvgOrderByAggregateInput
   _max?: Prisma.EventMaxOrderByAggregateInput
@@ -410,6 +424,7 @@ export type EventScalarWhereWithAggregatesInput = {
   rentTotalPrice?: Prisma.DecimalWithAggregatesFilter<"Event"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
+  googleEventId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
 }
 
 export type EventCreateInput = {
@@ -428,7 +443,9 @@ export type EventCreateInput = {
   rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  googleEventId?: string | null
   assets?: Prisma.EventAssetCreateNestedManyWithoutEventInput
+  items?: Prisma.EventItemCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -448,7 +465,9 @@ export type EventUncheckedCreateInput = {
   rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  googleEventId?: string | null
   assets?: Prisma.EventAssetUncheckedCreateNestedManyWithoutEventInput
+  items?: Prisma.EventItemUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventUpdateInput = {
@@ -467,7 +486,9 @@ export type EventUpdateInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assets?: Prisma.EventAssetUpdateManyWithoutEventNestedInput
+  items?: Prisma.EventItemUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -487,7 +508,9 @@ export type EventUncheckedUpdateInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assets?: Prisma.EventAssetUncheckedUpdateManyWithoutEventNestedInput
+  items?: Prisma.EventItemUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateManyInput = {
@@ -507,6 +530,7 @@ export type EventCreateManyInput = {
   rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  googleEventId?: string | null
 }
 
 export type EventUpdateManyMutationInput = {
@@ -525,6 +549,7 @@ export type EventUpdateManyMutationInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventUncheckedUpdateManyInput = {
@@ -544,6 +569,7 @@ export type EventUncheckedUpdateManyInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EventCountOrderByAggregateInput = {
@@ -563,6 +589,7 @@ export type EventCountOrderByAggregateInput = {
   rentTotalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
 }
 
 export type EventAvgOrderByAggregateInput = {
@@ -590,6 +617,7 @@ export type EventMaxOrderByAggregateInput = {
   rentTotalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
 }
 
 export type EventMinOrderByAggregateInput = {
@@ -609,6 +637,7 @@ export type EventMinOrderByAggregateInput = {
   rentTotalPrice?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  googleEventId?: Prisma.SortOrder
 }
 
 export type EventSumOrderByAggregateInput = {
@@ -642,6 +671,20 @@ export type EventUpdateOneRequiredWithoutAssetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutAssetsInput, Prisma.EventUpdateWithoutAssetsInput>, Prisma.EventUncheckedUpdateWithoutAssetsInput>
 }
 
+export type EventCreateNestedOneWithoutItemsInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutItemsInput, Prisma.EventUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutItemsInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneRequiredWithoutItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutItemsInput, Prisma.EventUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutItemsInput
+  upsert?: Prisma.EventUpsertWithoutItemsInput
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutItemsInput, Prisma.EventUpdateWithoutItemsInput>, Prisma.EventUncheckedUpdateWithoutItemsInput>
+}
+
 export type EventCreateWithoutAssetsInput = {
   customerName: string
   customerPhone: string
@@ -658,6 +701,8 @@ export type EventCreateWithoutAssetsInput = {
   rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  googleEventId?: string | null
+  items?: Prisma.EventItemCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutAssetsInput = {
@@ -677,6 +722,8 @@ export type EventUncheckedCreateWithoutAssetsInput = {
   rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  googleEventId?: string | null
+  items?: Prisma.EventItemUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutAssetsInput = {
@@ -711,6 +758,8 @@ export type EventUpdateWithoutAssetsInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.EventItemUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutAssetsInput = {
@@ -730,6 +779,106 @@ export type EventUncheckedUpdateWithoutAssetsInput = {
   rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.EventItemUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateWithoutItemsInput = {
+  customerName: string
+  customerPhone: string
+  customerEmail?: string | null
+  eventAddress: string
+  notes?: string | null
+  date: Date | string
+  startTime: Date | string
+  endTime: Date | string
+  downPaymentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentComplete?: boolean
+  pendingPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  googleEventId?: string | null
+  assets?: Prisma.EventAssetCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutItemsInput = {
+  eventNo?: number
+  customerName: string
+  customerPhone: string
+  customerEmail?: string | null
+  eventAddress: string
+  notes?: string | null
+  date: Date | string
+  startTime: Date | string
+  endTime: Date | string
+  downPaymentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentComplete?: boolean
+  pendingPayment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentTotalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  googleEventId?: string | null
+  assets?: Prisma.EventAssetUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutItemsInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutItemsInput, Prisma.EventUncheckedCreateWithoutItemsInput>
+}
+
+export type EventUpsertWithoutItemsInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutItemsInput, Prisma.EventUncheckedUpdateWithoutItemsInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutItemsInput, Prisma.EventUncheckedCreateWithoutItemsInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutItemsInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutItemsInput, Prisma.EventUncheckedUpdateWithoutItemsInput>
+}
+
+export type EventUpdateWithoutItemsInput = {
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  downPaymentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingPayment?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.EventAssetUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutItemsInput = {
+  eventNo?: Prisma.IntFieldUpdateOperationsInput | number
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventAddress?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  downPaymentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  pendingPayment?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  discount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rentTotalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.EventAssetUncheckedUpdateManyWithoutEventNestedInput
 }
 
 
@@ -739,10 +888,12 @@ export type EventUncheckedUpdateWithoutAssetsInput = {
 
 export type EventCountOutputType = {
   assets: number
+  items: number
 }
 
 export type EventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assets?: boolean | EventCountOutputTypeCountAssetsArgs
+  items?: boolean | EventCountOutputTypeCountItemsArgs
 }
 
 /**
@@ -760,6 +911,13 @@ export type EventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
  */
 export type EventCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventAssetWhereInput
+}
+
+/**
+ * EventCountOutputType without action
+ */
+export type EventCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventItemWhereInput
 }
 
 
@@ -780,7 +938,9 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   rentTotalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  googleEventId?: boolean
   assets?: boolean | Prisma.Event$assetsArgs<ExtArgs>
+  items?: boolean | Prisma.Event$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
@@ -801,6 +961,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   rentTotalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  googleEventId?: boolean
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -820,6 +981,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   rentTotalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  googleEventId?: boolean
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -839,11 +1001,13 @@ export type EventSelectScalar = {
   rentTotalPrice?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  googleEventId?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventNo" | "customerName" | "customerPhone" | "customerEmail" | "eventAddress" | "notes" | "date" | "startTime" | "endTime" | "downPaymentAmount" | "paymentComplete" | "pendingPayment" | "discount" | "rentTotalPrice" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventNo" | "customerName" | "customerPhone" | "customerEmail" | "eventAddress" | "notes" | "date" | "startTime" | "endTime" | "downPaymentAmount" | "paymentComplete" | "pendingPayment" | "discount" | "rentTotalPrice" | "createdAt" | "updatedAt" | "googleEventId", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assets?: boolean | Prisma.Event$assetsArgs<ExtArgs>
+  items?: boolean | Prisma.Event$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -853,6 +1017,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Event"
   objects: {
     assets: Prisma.$EventAssetPayload<ExtArgs>[]
+    items: Prisma.$EventItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     eventNo: number
@@ -871,6 +1036,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     rentTotalPrice: runtime.Decimal
     createdAt: Date
     updatedAt: Date
+    googleEventId: string | null
   }, ExtArgs["result"]["event"]>
   composites: {}
 }
@@ -1266,6 +1432,7 @@ readonly fields: EventFieldRefs;
 export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assets<T extends Prisma.Event$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  items<T extends Prisma.Event$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1311,6 +1478,7 @@ export interface EventFieldRefs {
   readonly rentTotalPrice: Prisma.FieldRef<"Event", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
+  readonly googleEventId: Prisma.FieldRef<"Event", 'String'>
 }
     
 
@@ -1725,6 +1893,30 @@ export type Event$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.EventAssetScalarFieldEnum | Prisma.EventAssetScalarFieldEnum[]
+}
+
+/**
+ * Event.items
+ */
+export type Event$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventItem
+   */
+  select?: Prisma.EventItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventItem
+   */
+  omit?: Prisma.EventItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventItemInclude<ExtArgs> | null
+  where?: Prisma.EventItemWhereInput
+  orderBy?: Prisma.EventItemOrderByWithRelationInput | Prisma.EventItemOrderByWithRelationInput[]
+  cursor?: Prisma.EventItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventItemScalarFieldEnum | Prisma.EventItemScalarFieldEnum[]
 }
 
 /**

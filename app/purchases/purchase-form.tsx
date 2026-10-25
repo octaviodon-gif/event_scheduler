@@ -7,7 +7,11 @@ import { PURCHASE_STATUS_LABELS, PURCHASE_STATUS_VALUES } from "@/lib/purchase-s
 const input =
   "w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 dark:border-neutral-700";
 
-export default function PurchaseForm() {
+export default function PurchaseForm({
+  categories,
+}: {
+  categories: { id: string; name: string }[];
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const [total, setTotal] = useState("0.00");
 
@@ -63,9 +67,38 @@ export default function PurchaseForm() {
       </label>
 
       <label>
+        <span className="text-sm">Rental price (optional)</span>
+        <input name="rentalPrice" inputMode="decimal" placeholder="0.00" className={input} />
+        <p className="mt-1 text-xs text-neutral-500">
+          What a customer pays to rent one unit when it is not part of a set.
+        </p>
+        {err("rentalPrice")}
+      </label>
+
+      <label>
         <span className="text-sm">Provider</span>
         <input name="provider" className={input} required maxLength={150} />
         {err("provider")}
+      </label>
+
+      <label>
+        <span className="text-sm">Category</span>
+        <select name="categoryId" defaultValue="" required className={input}>
+          <option value="" disabled>
+            Choose…
+          </option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        {err("categoryId")}
+        {categories.length === 0 && (
+          <p className="mt-1 text-xs text-neutral-500">
+            No categories yet. Create one in Item categories first.
+          </p>
+        )}
       </label>
 
       <label>

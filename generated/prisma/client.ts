@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Assets
- * const assets = await prisma.asset.findMany()
+ * // Fetch zero or more Categories
+ * const categories = await prisma.category.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,27 +42,42 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
  * Model Asset
  * 
  */
 export type Asset = Prisma.AssetModel
+/**
+ * Model AssetSlot
+ * 
+ */
+export type AssetSlot = Prisma.AssetSlotModel
+/**
+ * Model AssetFixedItem
+ * 
+ */
+export type AssetFixedItem = Prisma.AssetFixedItemModel
 /**
  * Model Event
  * 
  */
 export type Event = Prisma.EventModel
 /**
- * Model Purchase
- * 
- */
-export type Purchase = Prisma.PurchaseModel
-/**
- * Model AssetItem
- * 
- */
-export type AssetItem = Prisma.AssetItemModel
-/**
  * Model EventAsset
  * 
  */
 export type EventAsset = Prisma.EventAssetModel
+/**
+ * Model EventItem
+ * 
+ */
+export type EventItem = Prisma.EventItemModel
+/**
+ * Model Purchase
+ * 
+ */
+export type Purchase = Prisma.PurchaseModel
