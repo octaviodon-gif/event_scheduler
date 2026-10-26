@@ -1,7 +1,5 @@
 import { signIn } from "@/auth";
 
-export const instant = false;
-
 export default async function LoginPage({
   searchParams,
 }: {

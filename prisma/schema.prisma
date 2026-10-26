@@ -195,3 +195,19 @@ model Purchase {
   @@index([categoryId])
   @@map("purchases")
 }
+
+// ─────────────────────────────────────────────
+// Business settings: a single row (id = 1), edited from the Settings page.
+// While no row exists, the values from .env are used.
+// ─────────────────────────────────────────────
+model Setting {
+  id            Int      @id @default(1)
+  eventPrefix   String   @map("event_prefix") @db.VarChar(10)
+  businessName  String   @map("business_name") @db.VarChar(100)
+  timezone      String   @db.VarChar(60)
+  bufferMinutes Int      @map("buffer_minutes")
+  durationHours Int      @map("duration_hours")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

@@ -10,9 +10,8 @@ import { UserError } from "@/lib/inventory";
 import { freeUnitsByPurchase, timesOverlap } from "@/lib/availability";
 import { syncEventToCalendar, updateEventInCalendar } from "@/lib/event-calendar";
 import { addMinutes } from "@/lib/time";
+import { getSettings } from "@/lib/settings";
 import {
-  EVENT_BUFFER_MINUTES,
-  EVENT_DURATION_MINUTES,
   isRealDate,
   dateToDate,
   minutesOfDay,
@@ -43,13 +42,14 @@ export async function getFreeUnits(
   if (!isRealDate(date) || !TIME_RE.test(startTime)) {
     return { error: "Enter a valid date and start time." };
   }
+  const s = await getSettings();
   const start = timeToMinutes(startTime);
-  const end = start + EVENT_DURATION_MINUTES; // every event lasts the same number of hours
+  const end = start + s.durationMinutes; // every event lasts the same number of hours
   if (end >= 24 * 60) return { error: "That start time would end after midnight. Choose an earlier start." };
 
   const exclude =
     excludeEventNo && Number.isInteger(excludeEventNo) && excludeEventNo > 0 ? excludeEventNo : undefined;
-  const free = await freeUnitsByPurchase(prisma, date, start, end, EVENT_BUFFER_MINUTES, exclude);
+  const free = await freeUnitsByPurchase(prisma, date, start, end, s.bufferMinutes, exclude);
   return { free: Object.fromEntries(free) };
 }
 
@@ -81,7 +81,7 @@ type EventInput = z.infer<typeof schema> & {
   extras: Map<string, number>;
 };
 
-function parseEventForm(formData: FormData): { data: EventInput } | { state: EventFormState } {
+function parseEventForm(formData: FormData, durationMinutes: number): { data: EventInput } | { state: EventFormState } {
   const parsed = schema.safeParse({
     customerName: formData.get("customerName") ?? "",
     customerPhone: formData.get("customerPhone") ?? "",
@@ -106,17 +106,17 @@ function parseEventForm(formData: FormData): { data: EventInput } | { state: Eve
   const d = parsed.data;
 
   const startMin = timeToMinutes(d.startTime);
-  const endMin = startMin + EVENT_DURATION_MINUTES; // the end time is never typed: start + duration
+  const endMin = startMin + durationMinutes; // the end time is never typed: start + duration
   if (endMin >= 24 * 60) {
     return {
       state: {
         fieldErrors: {
-          startTime: `Events last ${EVENT_DURATION_MINUTES / 60} hours and must end before midnight, so choose an earlier start.`,
+          startTime: `Events last ${durationMinutes / 60} hours and must end before midnight, so choose an earlier start.`,
         },
       },
     };
   }
-  const endTime = addMinutes(d.startTime, EVENT_DURATION_MINUTES)!;
+  const endTime = addMinutes(d.startTime, durationMinutes)!;
 
   // The down payment rule: an event is never scheduled without one
   if (!(Number(d.downPaymentAmount) > 0)) {
@@ -157,8 +157,9 @@ async function planEvent(
   d: EventInput,
   excludeEventNo: number | undefined,
   keep: Keep | null,
+  buffer: number,
 ) {
-  const free = await freeUnitsByPurchase(tx, d.date, d.startMin, d.endMin, EVENT_BUFFER_MINUTES, excludeEventNo);
+  const free = await freeUnitsByPurchase(tx, d.date, d.startMin, d.endMin, buffer, excludeEventNo);
   const names = new Map<string, string>();
   const used = new Map<string, number>();
   const use = (id: string, qty: number) => used.set(id, (used.get(id) ?? 0) + qty);
@@ -188,7 +189,7 @@ async function planEvent(
         },
       });
       const clashing = sameDay.filter((ev) =>
-        timesOverlap(d.startMin, d.endMin, minutesOfDay(ev.startTime), minutesOfDay(ev.endTime), EVENT_BUFFER_MINUTES),
+        timesOverlap(d.startMin, d.endMin, minutesOfDay(ev.startTime), minutesOfDay(ev.endTime), buffer),
       ).length;
       if (clashing >= set.assetAmount) {
         throw new UserError(
@@ -302,7 +303,8 @@ export async function createEvent(
   const session = await auth();
   if (!session) return { error: "You are not signed in." };
 
-  const result = parseEventForm(formData);
+  const s = await getSettings();
+  const result = parseEventForm(formData, s.durationMinutes);
   if ("state" in result) return result.state;
   const d = result.data;
 
@@ -316,7 +318,7 @@ export async function createEvent(
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       eventNo = await prisma.$transaction(async (tx) => {
-        const plan = await planEvent(tx, d, undefined, null);
+        const plan = await planEvent(tx, d, undefined, null, s.bufferMinutes);
         const money = computeMoney(d, plan.setPrice, plan.extrasTotal);
 
         // Next event number (running count)
@@ -368,7 +370,8 @@ export async function updateEvent(
   const eventNo = Number(formData.get("eventNo"));
   if (!Number.isInteger(eventNo) || eventNo < 1) return { error: "Invalid event." };
 
-  const result = parseEventForm(formData);
+  const s = await getSettings();
+  const result = parseEventForm(formData, s.durationMinutes);
   if ("state" in result) return result.state;
   const d = result.data;
 
@@ -397,7 +400,7 @@ export async function updateEvent(
         extraPrices,
       };
 
-      const plan = await planEvent(tx, d, eventNo, keep);
+      const plan = await planEvent(tx, d, eventNo, keep, s.bufferMinutes);
       const money = computeMoney(d, plan.setPrice, plan.extrasTotal);
 
       // replace the items with what the form now says

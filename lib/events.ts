@@ -1,20 +1,8 @@
-// Business settings come from .env so every business can set its own
-export const EVENT_PREFIX = process.env.EVENT_NUMBER_PREFIX?.trim() || "EVT";
-export const BUSINESS_NAME = process.env.BUSINESS_NAME?.trim() || "";
-export const EVENT_TIMEZONE = process.env.EVENT_TIMEZONE?.trim() || "UTC";
-// Minutes needed before and after an event for delivery, setup and pickup (0 = none)
-export const EVENT_BUFFER_MINUTES = Math.max(
-  Number.parseInt(process.env.EVENT_BUFFER_MINUTES ?? "0", 10) || 0,
-  0,
-);
-
-// How long every event lasts (the end time is calculated from the start time)
-export const EVENT_DURATION_MINUTES =
-  Math.max(Number.parseInt(process.env.EVENT_DURATION_HOURS ?? "5", 10) || 5, 1) * 60;
+// Business settings (prefix, name, timezone, buffer, duration) live in lib/settings.ts
 
 // 12 -> "BBCITOS-0012"
-export function formatEventNo(n: number) {
-  return `${EVENT_PREFIX}-${String(n).padStart(4, "0")}`;
+export function formatEventNo(n: number, prefix: string) {
+  return `${prefix}-${String(n).padStart(4, "0")}`;
 }
 
 export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;

@@ -1,7 +1,7 @@
-import { BUSINESS_NAME, EVENT_TIMEZONE } from "@/lib/events";
-
 export type CalendarEventInput = {
   eventLabel: string; // e.g. BBCITOS-0001
+  businessName: string;
+  timezone: string; // e.g. America/Mexico_City
   customerName: string;
   customerPhone: string;
   customerEmail: string | null;
@@ -19,7 +19,7 @@ export type CalendarEventInput = {
 
 // The calendar text is in Spanish, like the events the business already creates by hand
 export function buildTitle(i: CalendarEventInput) {
-  return [BUSINESS_NAME, i.customerName, i.customerPhone].filter(Boolean).join(" – ");
+  return [i.businessName, i.customerName, i.customerPhone].filter(Boolean).join(" – ");
 }
 
 export function buildDescription(i: CalendarEventInput) {
@@ -49,8 +49,8 @@ function buildBody(input: CalendarEventInput) {
     summary: buildTitle(input),
     location: input.address, // Google Calendar turns this into a Maps link
     description: buildDescription(input),
-    start: { dateTime: `${input.date}T${input.start}:00`, timeZone: EVENT_TIMEZONE },
-    end: { dateTime: `${input.date}T${input.end}:00`, timeZone: EVENT_TIMEZONE },
+    start: { dateTime: `${input.date}T${input.start}:00`, timeZone: input.timezone },
+    end: { dateTime: `${input.date}T${input.end}:00`, timeZone: input.timezone },
     reminders: {
       useDefault: false,
       overrides: [

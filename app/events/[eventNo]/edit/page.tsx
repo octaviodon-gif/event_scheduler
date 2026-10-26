@@ -5,13 +5,12 @@ import { Prisma } from "@/generated/prisma/client";
 import { getEventCatalog } from "@/lib/event-catalog";
 import { freeUnitsByPurchase } from "@/lib/availability";
 import {
-  EVENT_BUFFER_MINUTES,
-  EVENT_DURATION_MINUTES,
   formatEventNo,
   minutesOfDay,
   toDateString,
   toTimeString,
 } from "@/lib/events";
+import { getSettings } from "@/lib/settings";
 import EventForm, { type EventInitial } from "../../event-form";
 
 export const instant = false;
@@ -31,13 +30,14 @@ export default async function EditEventPage({
   });
   if (!ev) notFound();
 
+  const s = await getSettings();
   const date = toDateString(ev.date);
   const startMin = minutesOfDay(ev.startTime);
 
   const [catalog, free] = await Promise.all([
     getEventCatalog(ev.items.map((i) => i.purchaseId)),
     // what is free at the event's own time, not counting the event itself
-    freeUnitsByPurchase(prisma, date, startMin, startMin + EVENT_DURATION_MINUTES, EVENT_BUFFER_MINUTES, ev.eventNo),
+    freeUnitsByPurchase(prisma, date, startMin, startMin + s.durationMinutes, s.bufferMinutes, ev.eventNo),
   ]);
 
   const extras = ev.items.filter((i) => i.kind === "EXTRA");
@@ -74,16 +74,16 @@ export default async function EditEventPage({
   return (
     <main className="mx-auto max-w-3xl p-6">
       <Link href={`/events/${ev.eventNo}`} className="text-sm text-neutral-500 hover:underline">
-        ← {formatEventNo(ev.eventNo)}
+        ← {formatEventNo(ev.eventNo, s.eventPrefix)}
       </Link>
-      <h1 className="mt-2 text-2xl font-semibold">Edit {formatEventNo(ev.eventNo)}</h1>
+      <h1 className="mt-2 text-2xl font-semibold">Edit {formatEventNo(ev.eventNo, s.eventPrefix)}</h1>
 
       <section className="mt-6 rounded-xl border border-neutral-300 p-5 dark:border-neutral-700">
         <EventForm
-          nextNo={formatEventNo(ev.eventNo)}
+          nextNo={formatEventNo(ev.eventNo, s.eventPrefix)}
           sets={catalog.sets}
           items={catalog.items}
-          durationMinutes={EVENT_DURATION_MINUTES}
+          durationMinutes={s.durationMinutes}
           edit={{ eventNo: ev.eventNo, initial, initialFree: Object.fromEntries(free) }}
         />
       </section>

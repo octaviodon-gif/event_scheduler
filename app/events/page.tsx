@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatEventNo, toDateString, toTimeString } from "@/lib/events";
+import { getSettings } from "@/lib/settings";
 import CalendarRetryButton from "./[eventNo]/calendar-retry";
 
 export const instant = false;
 
 export default async function EventsPage() {
+  const s = await getSettings();
   const events = await prisma.event.findMany({
     include: { assets: { include: { asset: true } } },
     orderBy: [{ date: "desc" }, { startTime: "desc" }],
@@ -49,7 +51,7 @@ export default async function EventsPage() {
                 <tr key={ev.eventNo} className="border-b border-neutral-200 dark:border-neutral-800">
                   <td className="py-2 pr-4">
                     <Link href={`/events/${ev.eventNo}`} className="font-medium hover:underline">
-                      {formatEventNo(ev.eventNo)}
+                      {formatEventNo(ev.eventNo, s.eventPrefix)}
                     </Link>
                   </td>
                   <td className="py-2 pr-4">{toDateString(ev.date)}</td>

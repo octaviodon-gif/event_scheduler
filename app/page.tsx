@@ -24,6 +24,11 @@ const options = [
     description: "Book an event and send the Google Calendar invite.",
     href: "/events",
   },
+  {
+    title: "Business settings",
+    description: "Event number prefix, business name, event duration, buffer and timezone.",
+    href: "/settings",
+  },
 ];
 
 export default async function Dashboard() {

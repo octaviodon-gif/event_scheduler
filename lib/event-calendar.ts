@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getSettings } from "@/lib/settings";
 import { formatEventNo, toDateString, toTimeString } from "@/lib/events";
 import {
   insertCalendarEvent,
@@ -30,6 +31,7 @@ async function loadEvent(
     },
   });
   if (!ev) return { error: "Event not found." };
+  const s = await getSettings();
 
   const order = { SET_FIXED: 0, SET_PICK: 1, EXTRA: 2 } as const;
   const items = [
@@ -42,7 +44,9 @@ async function loadEvent(
   return {
     googleEventId: ev.googleEventId,
     input: {
-      eventLabel: formatEventNo(ev.eventNo),
+      eventLabel: formatEventNo(ev.eventNo, s.eventPrefix),
+      businessName: s.businessName,
+      timezone: s.timezone,
       customerName: ev.customerName,
       customerPhone: ev.customerPhone,
       customerEmail: ev.customerEmail,

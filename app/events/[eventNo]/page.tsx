@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { formatEventNo, mapsUrl, toDateString, toTimeString, wazeUrl } from "@/lib/events";
+import { getSettings } from "@/lib/settings";
 import CalendarRetryButton from "./calendar-retry";
 
 export const instant = false;
@@ -13,6 +14,7 @@ export default async function EventPage({
   params: Promise<{ eventNo: string }>;
   searchParams: Promise<{ calendar?: string; msg?: string }>;
 }) {
+  const s = await getSettings();
   const { eventNo } = await params;
   const { calendar, msg } = await searchParams;
 
@@ -38,7 +40,7 @@ export default async function EventPage({
         ← Events
       </Link>
       <div className="mt-2 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">{formatEventNo(ev.eventNo)}</h1>
+        <h1 className="text-2xl font-semibold">{formatEventNo(ev.eventNo, s.eventPrefix)}</h1>
         <Link
           href={`/events/${ev.eventNo}/edit`}
           className="rounded-md border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
