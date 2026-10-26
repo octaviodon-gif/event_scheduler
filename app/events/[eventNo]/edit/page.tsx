@@ -72,7 +72,7 @@ export default async function EditEventPage({
   };
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-6">
       <Link href={`/events/${ev.eventNo}`} className="text-sm text-neutral-500 hover:underline">
         ← {formatEventNo(ev.eventNo, s.eventPrefix)}
       </Link>

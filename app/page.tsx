@@ -35,18 +35,18 @@ export default async function Dashboard() {
   const session = await auth();
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <header className="flex items-center justify-between">
+    <main className="mx-auto w-full max-w-3xl p-6">
+      <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <form
           action={async () => {
             "use server";
             await signOut({ redirectTo: "/login" });
           }}
-          className="flex items-center gap-3 text-sm"
+          className="flex flex-wrap items-center gap-3 text-sm"
         >
-          <span className="text-neutral-500">{session?.user?.email}</span>
-          <button type="submit" className="rounded-md border px-3 py-1 hover:opacity-70">
+          <span className="break-all text-neutral-500">{session?.user?.email}</span>
+          <button type="submit" className="whitespace-nowrap rounded-md border px-3 py-1 hover:opacity-70">
             Sign out
           </button>
         </form>

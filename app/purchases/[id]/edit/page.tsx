@@ -20,7 +20,7 @@ export default async function EditPurchasePage({
   if (!p) notFound();
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-6">
       <Link href="/purchases" className="text-sm text-neutral-500 hover:underline">
         ← Purchases
       </Link>

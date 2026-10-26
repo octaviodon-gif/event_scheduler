@@ -24,7 +24,7 @@ export default async function EditSetPage({
   if (!set) notFound();
 
   return (
-    <main className="mx-auto max-w-4xl p-6">
+    <main className="mx-auto w-full max-w-4xl p-6">
       <Link href="/sets" className="text-sm text-neutral-500 hover:underline">
         ← Set Setup
       </Link>

@@ -17,7 +17,7 @@ export default async function NewEventPage() {
   const nextNo = formatEventNo((last._max.eventNo ?? 0) + 1, s.eventPrefix);
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-6">
       <Link href="/events" className="text-sm text-neutral-500 hover:underline">
         ← Events
       </Link>

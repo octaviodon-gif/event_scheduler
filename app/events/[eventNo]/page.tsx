@@ -35,7 +35,7 @@ export default async function EventPage({
   const row = "flex justify-between gap-4 py-1";
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-6">
       <Link href="/events" className="text-sm text-neutral-500 hover:underline">
         ← Events
       </Link>

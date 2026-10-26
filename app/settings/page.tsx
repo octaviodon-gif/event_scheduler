@@ -8,7 +8,7 @@ export default async function SettingsPage() {
   const s = await getSettings();
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-6">
       <Link href="/" className="text-sm text-neutral-500 hover:underline">
         ← Dashboard
       </Link>

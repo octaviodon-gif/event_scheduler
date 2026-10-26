@@ -19,7 +19,7 @@ export default async function SetsPage() {
   ]);
 
   return (
-    <main className="mx-auto max-w-4xl p-6">
+    <main className="mx-auto w-full max-w-4xl p-6">
       <Link href="/" className="text-sm text-neutral-500 hover:underline">
         ← Dashboard
       </Link>
