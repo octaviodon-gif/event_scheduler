@@ -81,3 +81,8 @@ export type EventItem = Prisma.EventItemModel
  * 
  */
 export type Purchase = Prisma.PurchaseModel
+/**
+ * Model Setting
+ * 
+ */
+export type Setting = Prisma.SettingModel

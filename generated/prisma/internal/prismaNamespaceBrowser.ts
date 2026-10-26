@@ -58,7 +58,8 @@ export const ModelName = {
   Event: 'Event',
   EventAsset: 'EventAsset',
   EventItem: 'EventItem',
-  Purchase: 'Purchase'
+  Purchase: 'Purchase',
+  Setting: 'Setting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -182,6 +183,19 @@ export const PurchaseScalarFieldEnum = {
 } as const
 
 export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum]
+
+
+export const SettingScalarFieldEnum = {
+  id: 'id',
+  eventPrefix: 'eventPrefix',
+  businessName: 'businessName',
+  timezone: 'timezone',
+  bufferMinutes: 'bufferMinutes',
+  durationHours: 'durationHours',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
 
 export const SortOrder = {
