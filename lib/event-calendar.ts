@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getSettings } from "@/lib/settings";
-import { formatEventNo, toDateString, toTimeString } from "@/lib/events";
+import { endsNextDay, formatEventNo, shiftDate, toDateString, toTimeString } from "@/lib/events";
 import {
   insertCalendarEvent,
   patchCalendarEvent,
@@ -55,6 +55,9 @@ async function loadEvent(
       date: toDateString(ev.date),
       start: toTimeString(ev.startTime),
       end: toTimeString(ev.endTime),
+      endDate: endsNextDay(ev.startTime, ev.endTime)
+        ? shiftDate(toDateString(ev.date), 1)
+        : toDateString(ev.date),
       items,
       downPayment: ev.downPaymentAmount.toFixed(2),
       discount: ev.discount.toFixed(2),

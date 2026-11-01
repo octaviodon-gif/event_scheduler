@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { formatEventNo, toDateString, toTimeString } from "@/lib/events";
+import { endsNextDay, formatEventNo, toDateString, toTimeString } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
 import CalendarRetryButton from "./[eventNo]/calendar-retry";
 
@@ -57,6 +57,7 @@ export default async function EventsPage() {
                   <td className="py-2 pr-4">{toDateString(ev.date)}</td>
                   <td className="py-2 pr-4">
                     {toTimeString(ev.startTime)} – {toTimeString(ev.endTime)}
+                    {endsNextDay(ev.startTime, ev.endTime) ? " (+1)" : ""}
                   </td>
                   <td className="py-2 pr-4">{ev.customerName}</td>
                   <td className="py-2 pr-4">{ev.assets.map((a) => a.asset.assetName).join(", ") || "—"}</td>

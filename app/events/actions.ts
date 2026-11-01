@@ -14,7 +14,8 @@ import { getSettings } from "@/lib/settings";
 import {
   isRealDate,
   dateToDate,
-  minutesOfDay,
+  eventWindow,
+  shiftDate,
   timeToDate,
   timeToMinutes,
   TIME_RE,
@@ -44,8 +45,7 @@ export async function getFreeUnits(
   }
   const s = await getSettings();
   const start = timeToMinutes(startTime);
-  const end = start + s.durationMinutes; // every event lasts the same number of hours
-  if (end >= 24 * 60) return { error: "That start time would end after midnight. Choose an earlier start." };
+  const end = start + s.durationMinutes; // may pass 1440: the event runs into the next day
 
   const exclude =
     excludeEventNo && Number.isInteger(excludeEventNo) && excludeEventNo > 0 ? excludeEventNo : undefined;
@@ -107,16 +107,7 @@ function parseEventForm(formData: FormData, durationMinutes: number): { data: Ev
 
   const startMin = timeToMinutes(d.startTime);
   const endMin = startMin + durationMinutes; // the end time is never typed: start + duration
-  if (endMin >= 24 * 60) {
-    return {
-      state: {
-        fieldErrors: {
-          startTime: `Events last ${durationMinutes / 60} hours and must end before midnight, so choose an earlier start.`,
-        },
-      },
-    };
-  }
-  const endTime = addMinutes(d.startTime, durationMinutes)!;
+  const endTime = addMinutes(d.startTime, durationMinutes); // after midnight it is the next day's time
 
   // The down payment rule: an event is never scheduled without one
   if (!(Number(d.downPaymentAmount) > 0)) {
@@ -183,14 +174,15 @@ async function planEvent(
     if (set.assetAmount) {
       const sameDay = await tx.event.findMany({
         where: {
-          date: dateToDate(d.date),
+          date: { gte: dateToDate(shiftDate(d.date, -1)), lte: dateToDate(shiftDate(d.date, 1)) },
           assets: { some: { assetId: setId } },
           ...(excludeEventNo ? { eventNo: { not: excludeEventNo } } : {}),
         },
       });
-      const clashing = sameDay.filter((ev) =>
-        timesOverlap(d.startMin, d.endMin, minutesOfDay(ev.startTime), minutesOfDay(ev.endTime), buffer),
-      ).length;
+      const clashing = sameDay.filter((ev) => {
+        const [evStart, evEnd] = eventWindow(ev, d.date);
+        return timesOverlap(d.startMin, d.endMin, evStart, evEnd, buffer);
+      }).length;
       if (clashing >= set.assetAmount) {
         throw new UserError(
           `"${set.assetName}" can only be rented ${set.assetAmount} at a time, and that limit is already reached for this time.`,
@@ -272,6 +264,13 @@ function computeMoney(d: EventInput, setPrice: Prisma.Decimal, extrasTotal: Pris
   const total = subtotal.sub(discount);
   const down = new Prisma.Decimal(d.downPaymentAmount);
   if (down.gt(total)) throw new UserError("The down payment cannot be more than the rent total.");
+  // An event is never scheduled until at least half of the rent total is paid
+  const minDown = total.div(2).toDecimalPlaces(2, Prisma.Decimal.ROUND_UP);
+  if (down.lt(minDown)) {
+    throw new UserError(
+      `The down payment must be at least half of the rent total: $${minDown.toFixed(2)} minimum for a total of $${total.toFixed(2)}.`,
+    );
+  }
   return { discount, total, down, pending: total.sub(down) };
 }
 
@@ -307,11 +306,6 @@ export async function createEvent(
   const result = parseEventForm(formData, s.durationMinutes);
   if ("state" in result) return result.state;
   const d = result.data;
-
-  // The down payment rule: an event is never scheduled until it is paid
-  if (formData.get("downPaymentReceived") !== "on") {
-    return { error: "The down payment must be paid before the event can be scheduled." };
-  }
 
   let eventNo = 0;
 

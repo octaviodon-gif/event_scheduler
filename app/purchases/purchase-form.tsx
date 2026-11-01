@@ -2,6 +2,7 @@
 
 import { startTransition, useActionState, useRef, useState } from "react";
 import { createPurchase, type PurchaseFormState } from "./actions";
+import CategorySelect from "@/app/categories/category-select";
 import { PURCHASE_STATUS_LABELS, PURCHASE_STATUS_VALUES } from "@/lib/purchase-status";
 
 const input =
@@ -81,25 +82,11 @@ export default function PurchaseForm({
         {err("provider")}
       </label>
 
-      <label>
+      <div>
         <span className="text-sm">Category</span>
-        <select name="categoryId" defaultValue="" required className={input}>
-          <option value="" disabled>
-            Choose…
-          </option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        <CategorySelect categories={categories} />
         {err("categoryId")}
-        {categories.length === 0 && (
-          <p className="mt-1 text-xs text-neutral-500">
-            No categories yet. Create one in Item categories first.
-          </p>
-        )}
-      </label>
+      </div>
 
       <label>
         <span className="text-sm">Status</span>

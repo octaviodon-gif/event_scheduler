@@ -198,7 +198,7 @@ export default function SetForm({
 
         {categories.length === 0 ? (
           <p className="mt-3 rounded-md border border-dashed border-neutral-300 p-3 text-sm text-neutral-500 dark:border-neutral-700">
-            No categories yet. Create them in Item categories first.
+            No categories yet. Create one from the Category dropdown when you register a purchase.
           </p>
         ) : (
           <ul className="mt-3 divide-y divide-neutral-200 rounded-md border border-neutral-300 dark:divide-neutral-800 dark:border-neutral-700">

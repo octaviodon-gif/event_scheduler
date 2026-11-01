@@ -5,11 +5,6 @@ export const instant = false;
 
 const options = [
   {
-    title: "Item categories",
-    description: "Define the types of items you rent, like inflables or toldos.",
-    href: "/categories",
-  },
-  {
     title: "Register Purchases",
     description: "Record items you bought: quantity, provider, price and status.",
     href: "/purchases",

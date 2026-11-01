@@ -28,3 +28,25 @@ export const mapsUrl = (address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 export const wazeUrl = (address: string) =>
   `https://waze.com/ul?q=${encodeURIComponent(address)}&navigate=yes`;
+
+// "2026-11-01" + 1 -> "2026-11-02"
+export function shiftDate(value: string, days: number) {
+  const d = dateToDate(value);
+  d.setUTCDate(d.getUTCDate() + days);
+  return toDateString(d);
+}
+
+// An event that ends at or before its start time ends the next day (it crosses midnight)
+export const endsNextDay = (start: Date, end: Date) => minutesOfDay(end) <= minutesOfDay(start);
+
+// The minutes an event occupies, counted from midnight of `baseDate`.
+// An event that crosses midnight runs past 1440; one from the day before starts below 0.
+export function eventWindow(
+  ev: { date: Date; startTime: Date; endTime: Date },
+  baseDate: string,
+): [number, number] {
+  const offset = Math.round((ev.date.getTime() - dateToDate(baseDate).getTime()) / 86_400_000);
+  const start = minutesOfDay(ev.startTime) + offset * 1440;
+  const end = minutesOfDay(ev.endTime) + offset * 1440 + (endsNextDay(ev.startTime, ev.endTime) ? 1440 : 0);
+  return [start, end];
+}

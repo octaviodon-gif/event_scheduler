@@ -56,3 +56,28 @@ export async function deleteCategory(
   revalidatePath("/sets");
   return { ok: true };
 }
+
+// Creates a category from a dropdown (Register Purchases). If one with that name already exists
+// (ignoring capitals), it is returned instead of making a duplicate.
+export async function createCategoryInline(
+  name: string,
+): Promise<{ id?: string; name?: string; error?: string }> {
+  const session = await auth();
+  if (!session) return { error: "You are not signed in." };
+
+  const parsed = nameSchema.safeParse(name);
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid name." };
+
+  try {
+    const existing = await prisma.category.findFirst({
+      where: { name: { equals: parsed.data, mode: "insensitive" } },
+    });
+    const category = existing ?? (await prisma.category.create({ data: { name: parsed.data } }));
+    revalidatePath("/purchases");
+    revalidatePath("/sets");
+    return { id: category.categoryId, name: category.name };
+  } catch (e) {
+    console.error("createCategoryInline failed", e);
+    return { error: "Could not save the category. Please try again." };
+  }
+}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { formatEventNo, mapsUrl, toDateString, toTimeString, wazeUrl } from "@/lib/events";
+import { endsNextDay, formatEventNo, mapsUrl, toDateString, toTimeString, wazeUrl } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
 import CalendarRetryButton from "./calendar-retry";
 
@@ -50,6 +50,7 @@ export default async function EventPage({
       </div>
       <p className="text-sm text-neutral-500">
         {toDateString(ev.date)} · {toTimeString(ev.startTime)} – {toTimeString(ev.endTime)}
+        {endsNextDay(ev.startTime, ev.endTime) ? " (+1 day)" : ""}
       </p>
 
       {/* Google Calendar status */}

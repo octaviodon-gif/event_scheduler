@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import CategorySelect from "@/app/categories/category-select";
 import { startTransition, useActionState, useRef, useState } from "react";
 import { updatePurchase, type PurchaseFormState } from "../../actions";
 import {
@@ -97,20 +98,11 @@ export default function EditForm({
         {err("provider")}
       </label>
 
-      <label>
+      <div>
         <span className="text-sm">Category</span>
-        <select name="categoryId" defaultValue={purchase.categoryId} required className={input}>
-          <option value="" disabled>
-            Choose…
-          </option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        <CategorySelect categories={categories} defaultValue={purchase.categoryId} />
         {err("categoryId")}
-      </label>
+      </div>
 
       <label>
         <span className="text-sm">Status</span>

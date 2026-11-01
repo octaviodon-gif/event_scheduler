@@ -10,6 +10,7 @@ export type CalendarEventInput = {
   date: string; // YYYY-MM-DD
   start: string; // HH:MM
   end: string; // HH:MM
+  endDate: string; // YYYY-MM-DD, the next day when the event crosses midnight
   items: { name: string; quantity: number }[]; // set name first, then its items and extras
   downPayment: string; // already formatted, e.g. "690.00"
   discount: string;
@@ -30,7 +31,7 @@ export function buildDescription(i: CalendarEventInput) {
     ...(i.customerEmail ? [`Correo: ${i.customerEmail}`] : []),
     `Dirección: ${i.address}`,
     `Fecha: ${i.date}`,
-    `Horario: ${i.start} – ${i.end}`,
+    `Horario: ${i.start} – ${i.end}${i.endDate !== i.date ? " (día siguiente)" : ""}`,
     "",
     "📦 Mobiliario:",
     ...i.items.map((it) => `• ${it.name}${it.quantity > 1 ? ` (${it.quantity})` : ""}`),
@@ -50,7 +51,7 @@ function buildBody(input: CalendarEventInput) {
     location: input.address, // Google Calendar turns this into a Maps link
     description: buildDescription(input),
     start: { dateTime: `${input.date}T${input.start}:00`, timeZone: input.timezone },
-    end: { dateTime: `${input.date}T${input.end}:00`, timeZone: input.timezone },
+    end: { dateTime: `${input.endDate}T${input.end}:00`, timeZone: input.timezone },
     reminders: {
       useDefault: false,
       overrides: [

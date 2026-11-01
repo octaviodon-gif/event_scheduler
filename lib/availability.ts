@@ -1,5 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client";
-import { dateToDate, minutesOfDay } from "@/lib/events";
+import { dateToDate, eventWindow, shiftDate } from "@/lib/events";
 
 // Two time windows clash if they overlap, counting the buffer needed between events
 export function timesOverlap(
@@ -26,7 +26,8 @@ export async function freeUnitsByPurchase(
     tx.purchase.findMany({ where: { purchaseStatus: "COMPLETED" } }),
     tx.event.findMany({
       where: {
-        date: dateToDate(date),
+        // the day before and after too: an event can run past midnight
+        date: { gte: dateToDate(shiftDate(date, -1)), lte: dateToDate(shiftDate(date, 1)) },
         ...(excludeEventNo ? { eventNo: { not: excludeEventNo } } : {}),
       },
       include: { items: true },
@@ -35,7 +36,8 @@ export async function freeUnitsByPurchase(
 
   const reserved = new Map<string, number>();
   for (const ev of events) {
-    if (!timesOverlap(startMin, endMin, minutesOfDay(ev.startTime), minutesOfDay(ev.endTime), buffer)) {
+    const [evStart, evEnd] = eventWindow(ev, date);
+    if (!timesOverlap(startMin, endMin, evStart, evEnd, buffer)) {
       continue;
     }
     for (const it of ev.items) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { startTransition, useActionState, useRef, useState } from "react";
 import { createEvent, getFreeUnits, updateEvent, type EventFormState } from "./actions";
-import { addMinutes } from "@/lib/time";
+import { addMinutes, hhmmToMinutes } from "@/lib/time";
 
 export type CatalogItem = {
   id: string;
@@ -142,7 +142,8 @@ export default function EventForm({
   const [whenError, setWhenError] = useState<string | null>(null);
   const requestId = useRef(0);
   const end = start ? addMinutes(start, durationMinutes) : null; // start + duration
-  const maxStart = 24 * 60 - 1 - durationMinutes; // latest start that still ends before midnight
+  const endsNextDay = !!start && hhmmToMinutes(start) + durationMinutes >= 24 * 60;
+  const maxStart = 24 * 60 - 1; // any start time of the day; the event may end after midnight
 
   // what
   const [setId, setSetId] = useState(initial?.setId ?? "");
@@ -190,11 +191,6 @@ export default function EventForm({
     setWhenError(null);
 
     if (!DATE_RE.test(nextDate) || !TIME_RE.test(nextStart)) return;
-    if (!addMinutes(nextStart, durationMinutes)) {
-      setWhenError("That start time would end after midnight. Choose an earlier start.");
-      return;
-    }
-
     const id = ++requestId.current;
     setLoading(true);
     startTransition(async () => {
@@ -291,6 +287,10 @@ export default function EventForm({
   const total = Math.max(subtotal - discountN, 0);
   const downN = Number(down) || 0;
   const pendingN = Math.max(total - downN, 0);
+  // at least half of the rent total, counted in cents so there are no rounding surprises
+  const minDownCents = Math.ceil(Math.round(total * 100) / 2);
+  const minDown = minDownCents / 100;
+  const downTooLow = Math.round(downN * 100) < minDownCents || !(downN > 0);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); // manual submit so an error doesn't wipe what was typed
@@ -407,7 +407,12 @@ export default function EventForm({
         </div>
         <label>
           <span className="text-sm">End (automatic)</span>
-          <input value={end ?? ""} readOnly placeholder="—" className={readonlyInput} />
+          <input
+            value={end ? `${end}${endsNextDay ? " (+1 day)" : ""}` : ""}
+            readOnly
+            placeholder="—"
+            className={readonlyInput}
+          />
         </label>
       </div>
 
@@ -530,52 +535,62 @@ export default function EventForm({
             );
             const price = extraPriceOf(row.item);
             return (
-              <div key={row.key} className="flex flex-wrap items-center gap-2">
-                <select
-                  name="extraItem"
-                  value={row.item}
-                  onChange={(e) =>
-                    setExtras((rows) =>
-                      rows.map((r) => (r.key === row.key ? { ...r, item: e.target.value, qty: 1 } : r)),
-                    )
-                  }
-                  className={`${input} min-w-0 flex-1`}
-                  required
-                >
-                  <option value="">Choose an item…</option>
-                  {options.map((o) => (
-                    <option key={o.id} value={o.id}>
-                      {optionLabel(o, ` — $${extraPriceOf(o.id)}`)}
-                    </option>
-                  ))}
-                </select>
-                <label className="flex items-center gap-1 text-xs text-neutral-500">
-                  Qty
-                  <input
-                    name="extraQty"
-                    type="number"
-                    min={1}
-                    max={Math.max(left, 1)}
-                    step={1}
-                    value={row.qty}
+              <div
+                key={row.key}
+                className="space-y-2 rounded-md border border-neutral-300 p-3 dark:border-neutral-700"
+              >
+                <label className="block">
+                  <span className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+                    Extra item
+                  </span>
+                  <select
+                    name="extraItem"
+                    value={row.item}
                     onChange={(e) =>
                       setExtras((rows) =>
-                        rows.map((r) => (r.key === row.key ? { ...r, qty: Number(e.target.value) } : r)),
+                        rows.map((r) => (r.key === row.key ? { ...r, item: e.target.value, qty: 1 } : r)),
                       )
                     }
-                    className={smallInput}
-                  />
+                    className={`${input} mt-1 w-full py-3 text-base`}
+                    required
+                  >
+                    <option value="">Tap to choose an item…</option>
+                    {options.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {optionLabel(o, ` — $${extraPriceOf(o.id)}`)}
+                      </option>
+                    ))}
+                  </select>
                 </label>
-                <span className="w-24 text-right text-sm">
-                  {price ? `$${fmt(Number(price) * (row.qty || 0))}` : ""}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setExtras((rows) => rows.filter((r) => r.key !== row.key))}
-                  className="text-sm text-red-600 hover:underline"
-                >
-                  Remove
-                </button>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <label className="flex items-center gap-2 text-sm text-neutral-500">
+                    Qty
+                    <input
+                      name="extraQty"
+                      type="number"
+                      min={1}
+                      max={Math.max(left, 1)}
+                      step={1}
+                      value={row.qty}
+                      onChange={(e) =>
+                        setExtras((rows) =>
+                          rows.map((r) => (r.key === row.key ? { ...r, qty: Number(e.target.value) } : r)),
+                        )
+                      }
+                      className={`${smallInput} py-2 text-base`}
+                    />
+                  </label>
+                  <span className="text-sm font-medium">
+                    {price ? `$${fmt(Number(price) * (row.qty || 0))}` : ""}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setExtras((rows) => rows.filter((r) => r.key !== row.key))}
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -584,7 +599,7 @@ export default function EventForm({
             type="button"
             disabled={!ready}
             onClick={() => setExtras((rows) => [...rows, { key: nextKey.current++, item: "", qty: 1 }])}
-            className="rounded-md border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-100 disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-900"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm hover:bg-neutral-100 disabled:opacity-50 sm:w-auto dark:border-neutral-700 dark:hover:bg-neutral-900"
           >
             + Add an extra item
           </button>
@@ -638,12 +653,15 @@ export default function EventForm({
           </p>
         </label>
 
-        {!edit && (
-          <label className="flex items-start gap-2 text-sm sm:col-span-2">
-            <input type="checkbox" name="downPaymentReceived" required className="mt-1" />
-            <span>The down payment has been paid. An event is never scheduled until it is.</span>
-          </label>
-        )}
+        <p
+          className={`text-sm sm:col-span-2 ${
+            downN > 0 && downTooLow ? "text-red-600" : "text-neutral-500"
+          }`}
+        >
+          An event is never scheduled until the down payment is paid. The minimum is half of the rent total
+          {total > 0 ? `: $${fmt(minDown)}.` : "."}
+          {downN > 0 && downTooLow && total > 0 ? " The amount entered is below that." : ""}
+        </p>
       </div>
 
       {conflicts.length > 0 && (
@@ -658,7 +676,7 @@ export default function EventForm({
         </Link>
         <button
           type="submit"
-          disabled={pending || !ready || conflicts.length > 0}
+          disabled={pending || !ready || conflicts.length > 0 || downTooLow}
           className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
           {pending ? (edit ? "Saving…" : "Scheduling…") : edit ? "Save changes" : "Schedule event"}
