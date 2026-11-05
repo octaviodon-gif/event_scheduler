@@ -22,6 +22,11 @@ const options = [
     href: "/events",
   },
   {
+    title: "Ganancias",
+    description: "Ingresos por mes y año, y el set más rentado.",
+    href: "/profits",
+  },
+  {
     title: "Business settings",
     description: "Event number prefix, business name, event duration, buffer and timezone.",
     href: "/settings",
