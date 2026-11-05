@@ -31,7 +31,7 @@ export default function StatusSelect({ id, value }: { id: string; value: Purchas
         defaultValue={value}
         disabled={pending}
         onChange={onChange}
-        className="rounded-md border border-neutral-300 bg-transparent px-2 py-1 dark:border-neutral-700"
+        className="rounded-lg border border-violet-200 bg-white px-2 py-1 text-sm"
       >
         {PURCHASE_STATUS_VALUES.map((v) => (
           <option key={v} value={v}>
