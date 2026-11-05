@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { endsNextDay, formatEventNo, toDateString, toTimeString } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
-import CalendarRetryButton from "./[eventNo]/calendar-retry";
+import EventList from "./event-list";
 
 export const instant = false;
 
@@ -11,7 +11,7 @@ export default async function EventsPage() {
   const events = await prisma.event.findMany({
     include: { assets: { include: { asset: true } } },
     orderBy: [{ date: "desc" }, { startTime: "desc" }],
-    take: 200,
+    take: 1000,
   });
 
   return (
@@ -32,49 +32,23 @@ export default async function EventsPage() {
       {events.length === 0 ? (
         <p className="mt-6 text-sm text-neutral-500">No events yet.</p>
       ) : (
-        <div className="mt-6 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-neutral-300 dark:border-neutral-700">
-              <tr>
-                <th className="py-2 pr-4">No.</th>
-                <th className="py-2 pr-4">Date</th>
-                <th className="py-2 pr-4">Time</th>
-                <th className="py-2 pr-4">Customer</th>
-                <th className="py-2 pr-4">Set</th>
-                <th className="py-2 pr-4 text-right">Total</th>
-                <th className="py-2 pr-4 text-right">Pending</th>
-                <th className="py-2">Calendar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((ev) => (
-                <tr key={ev.eventNo} className="border-b border-neutral-200 dark:border-neutral-800">
-                  <td className="py-2 pr-4">
-                    <Link href={`/events/${ev.eventNo}`} className="font-medium hover:underline">
-                      {formatEventNo(ev.eventNo, s.eventPrefix)}
-                    </Link>
-                  </td>
-                  <td className="py-2 pr-4">{toDateString(ev.date)}</td>
-                  <td className="py-2 pr-4">
-                    {toTimeString(ev.startTime)} – {toTimeString(ev.endTime)}
-                    {endsNextDay(ev.startTime, ev.endTime) ? " (+1)" : ""}
-                  </td>
-                  <td className="py-2 pr-4">{ev.customerName}</td>
-                  <td className="py-2 pr-4">{ev.assets.map((a) => a.asset.assetName).join(", ") || "—"}</td>
-                  <td className="py-2 pr-4 text-right">${ev.rentTotalPrice.toFixed(2)}</td>
-                  <td className="py-2 pr-4 text-right">${ev.pendingPayment.toFixed(2)}</td>
-                  <td className="py-2">
-                    {ev.googleEventId ? (
-                      "Invite sent"
-                    ) : (
-                      <CalendarRetryButton eventNo={ev.eventNo} compact />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <EventList
+          rows={events.map((ev) => ({
+            eventNo: ev.eventNo,
+            label: formatEventNo(ev.eventNo, s.eventPrefix),
+            date: toDateString(ev.date),
+            time: `${toTimeString(ev.startTime)} – ${toTimeString(ev.endTime)}${
+              endsNextDay(ev.startTime, ev.endTime) ? " (+1)" : ""
+            }`,
+            endHM: toTimeString(ev.endTime),
+            nextDay: endsNextDay(ev.startTime, ev.endTime),
+            customer: ev.customerName,
+            sets: ev.assets.map((a) => a.asset.assetName).join(", "),
+            total: Number(ev.rentTotalPrice),
+            pending: Number(ev.pendingPayment),
+            invited: Boolean(ev.googleEventId),
+          }))}
+        />
       )}
     </main>
   );
