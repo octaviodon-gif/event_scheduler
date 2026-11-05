@@ -6,8 +6,8 @@ import { auth } from "@/auth";
 export const proxy = auth((req) => {
   const path = req.nextUrl.pathname;
   const isLogin = path === "/login";
-  // Public pages Google needs for the sign-in screen (homepage and privacy policy)
-  const isPublic = path === "/about" || path === "/privacy";
+  // Public pages: the landing page, and the homepage and privacy policy Google asks for
+  const isPublic = path === "/" || path === "/about" || path === "/privacy";
 
   if (isPublic) return;
 

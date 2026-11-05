@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
+import Landing from "./landing";
 
 export const instant = false;
 
@@ -29,6 +30,7 @@ const options = [
 
 export default async function Dashboard() {
   const session = await auth();
+  if (!session) return <Landing />; // signed-out visitors see the public page
 
   return (
     <main className="mx-auto w-full max-w-3xl p-6">
