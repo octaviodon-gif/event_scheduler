@@ -4,7 +4,12 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
 export const proxy = auth((req) => {
-  const isLogin = req.nextUrl.pathname === "/login";
+  const path = req.nextUrl.pathname;
+  const isLogin = path === "/login";
+  // Public pages Google needs for the sign-in screen (homepage and privacy policy)
+  const isPublic = path === "/about" || path === "/privacy";
+
+  if (isPublic) return;
 
   if (!req.auth && !isLogin) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
