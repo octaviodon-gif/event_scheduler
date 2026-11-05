@@ -677,7 +677,7 @@ export default function EventForm({
         <button
           type="submit"
           disabled={pending || !ready || conflicts.length > 0 || downTooLow}
-          className="rounded-md bg-black px-4 py-2 text-white disabled:opacity-50 dark:bg-white dark:text-black"
+          className="rounded-md bg-brand px-4 py-2 text-white disabled:opacity-50"
         >
           {pending ? (edit ? "Saving…" : "Scheduling…") : edit ? "Save changes" : "Schedule event"}
         </button>

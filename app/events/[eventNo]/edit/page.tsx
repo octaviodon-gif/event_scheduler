@@ -78,7 +78,7 @@ export default async function EditEventPage({
       </Link>
       <h1 className="mt-2 text-2xl font-semibold">Edit {formatEventNo(ev.eventNo, s.eventPrefix)}</h1>
 
-      <section className="mt-6 rounded-xl border border-neutral-300 p-5 dark:border-neutral-700">
+      <section className="mt-6 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 dark:border-neutral-700">
         <EventForm
           nextNo={formatEventNo(ev.eventNo, s.eventPrefix)}
           sets={catalog.sets}

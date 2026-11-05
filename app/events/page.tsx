@@ -23,7 +23,7 @@ export default async function EventsPage() {
         <h1 className="text-2xl font-semibold">Events</h1>
         <Link
           href="/events/new"
-          className="rounded-md bg-black px-4 py-2 text-sm text-white hover:opacity-80 dark:bg-white dark:text-black"
+          className="rounded-md bg-brand px-4 py-2 text-sm text-white hover:opacity-80"
         >
           Register Customer &amp; Event
         </Link>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
@@ -32,7 +33,10 @@ export default async function Dashboard() {
   return (
     <main className="mx-auto w-full max-w-3xl p-6">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <div className="flex items-center gap-3">
+          <Image src="/logo.png" alt="Bebecitos Play-gym" width={58} height={64} priority />
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+        </div>
         <form
           action={async () => {
             "use server";
@@ -53,7 +57,7 @@ export default async function Dashboard() {
             <Link
               key={o.title}
               href={o.href}
-              className="rounded-xl border border-neutral-300 p-5 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+              className="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm transition hover:border-accent hover:shadow-md"
             >
               <h2 className="font-medium">{o.title}</h2>
               <p className="mt-2 text-sm text-neutral-500">{o.description}</p>

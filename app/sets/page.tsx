@@ -25,7 +25,7 @@ export default async function SetsPage() {
       </Link>
       <h1 className="mt-2 text-2xl font-semibold">Set Setup</h1>
 
-      <section className="mt-6 rounded-xl border border-neutral-300 p-5 dark:border-neutral-700">
+      <section className="mt-6 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 dark:border-neutral-700">
         <SetForm categories={slotCategories} />
       </section>
 
@@ -35,7 +35,7 @@ export default async function SetsPage() {
       ) : (
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           {sets.map((s) => (
-            <article key={s.assetId} className="rounded-xl border border-neutral-300 p-4 dark:border-neutral-700">
+            <article key={s.assetId} className="rounded-2xl border border-violet-200 bg-white shadow-sm p-4 dark:border-neutral-700">
               <div className="flex items-start justify-between gap-3">
                 <h3 className="font-medium">{s.assetName}</h3>
                 <p className="text-sm font-medium">${s.assetPrice.toFixed(2)}</p>

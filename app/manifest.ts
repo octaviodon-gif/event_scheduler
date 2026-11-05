@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: process.env.BUSINESS_NAME ?? "Events",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#7c5cff",
+    background_color: "#fffaf6",
+    theme_color: "#2a4bd0",
     icons: [{ src: "/icon.png", sizes: "512x512", type: "image/png" }],
   };
 }

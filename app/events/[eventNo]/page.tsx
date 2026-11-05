@@ -77,7 +77,7 @@ export default async function EventPage({
         </div>
       )}
 
-      <section className="mt-6 rounded-xl border border-neutral-300 p-5 dark:border-neutral-700">
+      <section className="mt-6 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 dark:border-neutral-700">
         <h2 className="font-medium">Customer</h2>
         <p className="mt-2 text-sm">{ev.customerName}</p>
         <p className="text-sm">
@@ -131,7 +131,7 @@ export default async function EventPage({
         )}
       </section>
 
-      <section className="mt-4 rounded-xl border border-neutral-300 p-5 dark:border-neutral-700">
+      <section className="mt-4 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 dark:border-neutral-700">
         <h2 className="font-medium">Items</h2>
         {ev.assets.map((a) => (
           <p key={a.assetId} className="mt-2 text-sm font-medium">
@@ -164,7 +164,7 @@ export default async function EventPage({
         )}
       </section>
 
-      <section className="mt-4 rounded-xl border border-neutral-300 p-5 text-sm dark:border-neutral-700">
+      <section className="mt-4 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 text-sm dark:border-neutral-700">
         <h2 className="font-medium">Payment</h2>
         <div className={row}>
           <span>Rent total</span>
