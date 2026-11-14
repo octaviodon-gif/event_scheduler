@@ -100,6 +100,7 @@ model Event {
 
   assets EventAsset[]
   items  EventItem[]
+  photos EventPhoto[]
 
   @@index([date])
   @@map("events")
@@ -210,4 +211,17 @@ model Setting {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("settings")
+}
+
+// Reference photos of how the setup looked at an event (max 3, files live in Vercel Blob)
+model EventPhoto {
+  id        Int      @id @default(autoincrement())
+  eventNo   Int      @map("event_no")
+  url       String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  event Event @relation(fields: [eventNo], references: [eventNo], onDelete: Cascade)
+
+  @@index([eventNo])
+  @@map("event_photos")
 }

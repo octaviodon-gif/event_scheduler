@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { endsNextDay, formatEventNo, mapsUrl, toDateString, toTimeString, wazeUrl } from "@/lib/events";
 import { getSettings } from "@/lib/settings";
 import CalendarRetryButton from "./calendar-retry";
+import PhotoManager from "./photo-manager";
 
 export const instant = false;
 
@@ -26,6 +27,7 @@ export default async function EventPage({
     include: {
       assets: { include: { asset: true } },
       items: { include: { purchase: true } },
+      photos: { orderBy: { id: "asc" } },
     },
   });
   if (!ev) notFound();
@@ -163,6 +165,11 @@ export default async function EventPage({
           </>
         )}
       </section>
+
+      <PhotoManager
+        eventNo={ev.eventNo}
+        photos={ev.photos.map((p) => ({ id: p.id, url: p.url }))}
+      />
 
       <section className="mt-4 rounded-2xl border border-violet-200 bg-white shadow-sm p-5 text-sm dark:border-neutral-700">
         <h2 className="font-medium">Payment</h2>

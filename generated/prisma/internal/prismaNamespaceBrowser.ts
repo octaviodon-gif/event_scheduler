@@ -59,7 +59,8 @@ export const ModelName = {
   EventAsset: 'EventAsset',
   EventItem: 'EventItem',
   Purchase: 'Purchase',
-  Setting: 'Setting'
+  Setting: 'Setting',
+  EventPhoto: 'EventPhoto'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -196,6 +197,16 @@ export const SettingScalarFieldEnum = {
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
+export const EventPhotoScalarFieldEnum = {
+  id: 'id',
+  eventNo: 'eventNo',
+  url: 'url',
+  createdAt: 'createdAt'
+} as const
+
+export type EventPhotoScalarFieldEnum = (typeof EventPhotoScalarFieldEnum)[keyof typeof EventPhotoScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -405,7 +405,8 @@ export const ModelName = {
   EventAsset: 'EventAsset',
   EventItem: 'EventItem',
   Purchase: 'Purchase',
-  Setting: 'Setting'
+  Setting: 'Setting',
+  EventPhoto: 'EventPhoto'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "category" | "asset" | "assetSlot" | "assetFixedItem" | "event" | "eventAsset" | "eventItem" | "purchase" | "setting"
+    modelProps: "category" | "asset" | "assetSlot" | "assetFixedItem" | "event" | "eventAsset" | "eventItem" | "purchase" | "setting" | "eventPhoto"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1092,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EventPhoto: {
+      payload: Prisma.$EventPhotoPayload<ExtArgs>
+      fields: Prisma.EventPhotoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventPhotoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventPhotoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        findFirst: {
+          args: Prisma.EventPhotoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventPhotoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        findMany: {
+          args: Prisma.EventPhotoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        create: {
+          args: Prisma.EventPhotoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        createMany: {
+          args: Prisma.EventPhotoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventPhotoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        delete: {
+          args: Prisma.EventPhotoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        update: {
+          args: Prisma.EventPhotoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventPhotoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventPhotoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventPhotoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventPhotoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        aggregate: {
+          args: Prisma.EventPhotoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEventPhoto>
+        }
+        groupBy: {
+          args: Prisma.EventPhotoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventPhotoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventPhotoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventPhotoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1248,6 +1323,16 @@ export const SettingScalarFieldEnum = {
 } as const
 
 export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
+
+
+export const EventPhotoScalarFieldEnum = {
+  id: 'id',
+  eventNo: 'eventNo',
+  url: 'url',
+  createdAt: 'createdAt'
+} as const
+
+export type EventPhotoScalarFieldEnum = (typeof EventPhotoScalarFieldEnum)[keyof typeof EventPhotoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1558,6 +1643,7 @@ export type GlobalOmitConfig = {
   eventItem?: Prisma.EventItemOmit
   purchase?: Prisma.PurchaseOmit
   setting?: Prisma.SettingOmit
+  eventPhoto?: Prisma.EventPhotoOmit
 }
 
 /* Types for Logging */

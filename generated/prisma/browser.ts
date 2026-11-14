@@ -62,3 +62,8 @@ export type Purchase = Prisma.PurchaseModel
  * 
  */
 export type Setting = Prisma.SettingModel
+/**
+ * Model EventPhoto
+ * 
+ */
+export type EventPhoto = Prisma.EventPhotoModel
